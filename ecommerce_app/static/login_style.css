@@ -1,0 +1,44 @@
+
+
+/* * {
+  outline: 1px dashed red;
+} */
+
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  height: 90%;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #f1f3de;
+  background-image: var(--bs-gradient);
+  color: #eb8f8f;
+  text-align: center;
+}
+
+body h1, h2 {
+  color: #ec0101;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  align-content: space-around;
+  text-align: center;
+}
+
+  form button {
+    margin-top: 3%;
+  }
+
+  form input {
+    color: #ec0101;
+  }
+
+/* Override bootstrap form button colors */
+.btn-light {
+  background-color: #eb8f8f; color: white;
+}
