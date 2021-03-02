@@ -28,3 +28,24 @@ def order_show(request, id):
 def products(request):
 
     return render(request, 'products.html')
+
+# Renders the products/ edit_product page
+def edit_product(request, id):
+
+    context = {"id": id}
+
+    return render(request, 'edit_product.html', context)
+
+
+
+"""
+
+    Logic
+
+"""
+
+# Edits Product and handles the POST data from products/edit_product form
+def product_edit(request):
+
+
+    return redirect('/dashboard/products')
