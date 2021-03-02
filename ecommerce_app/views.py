@@ -13,8 +13,13 @@ def dashboard(request):
     return render(request, 'dashboard.html')
 
 # Renders the orders page
-def orders(request, id):
+def orders(request):
+
+    return render(request, 'orders.html')
+
+# Render the display order Page
+def order_show(request, id):
 
     context = {"id": id}
 
-    return render(request, 'orders.html', context)
+    return render(request, 'order_show.html', context)

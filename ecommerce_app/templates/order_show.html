@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <title>Orders | Show</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'orders_style.css' %}">
+  </head>
+
+  <body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light .bg-transparent">
+      <div class="container-fluid navbar-color">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="/dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/orders/1">Orders</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Products
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+          </ul>
+          <div class="nav-item">
+            <a class="nav-link active" id="logoff-hl" href="/clear">Log Off</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <div id="order-info">
+
+        <h2>Order ID: {{ id }}</h2>
+
+        <div id="ship-info">
+          <h4>Customer Shipping Info</h4>
+          <h5>Name</h5>
+          <h5>Address</h5>
+          <h5>City</h5>
+          <h5>State</h5>
+          <h5>Zip</h5>
+        </div>
+        <div id="bill-info">
+          <h4>Customer Billing Info</h4>
+          <h5>Name</h5>
+          <h5>Address</h5>
+          <h5>City</h5>
+          <h5>State</h5>
+          <h5>Zip</h5>
+        </div>
+
+      </div>
+
+      <div id="display-order">
+
+        <!-- Order items Table -->
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Order ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Date</th>
+              <th scope="col">Billing Address</th>
+              <th scope="col">Total</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="/orders/show/1">1</a></th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>@mdo</td>
+              <!--  Status drop down menu -->
+              <td>
+                <div class="dropdown">
+                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    Select
+                  </a>
+
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" href="#">Order in Process</a></li>
+                    <li><a class="dropdown-item" href="#">Shipped</a></li>
+                    <li><a class="dropdown-item" href="#">Cancel</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+      </div>
+    </main>
+
+
+
+  </body>
+
+</html>
