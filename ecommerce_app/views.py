@@ -36,6 +36,10 @@ def edit_product(request, id):
 
     return render(request, 'edit_product.html', context)
 
+# Renders add new product Page
+def add_product(reques):
+
+    return render(reques, 'add_product.html')
 
 
 """
@@ -53,5 +57,11 @@ def product_edit(request):
 
 # Delete product selected in products.html, the redirects back to products page
 def delete_product(request, id):
+
+    return redirect('/dashboard/products')
+
+# Creates a new Product using the POST data from add a new product page form, and then redirects to products Page
+def create_product(request):
+
 
     return redirect('/dashboard/products')
