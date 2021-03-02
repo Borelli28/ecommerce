@@ -49,3 +49,9 @@ def product_edit(request):
 
 
     return redirect('/dashboard/products')
+
+
+# Delete product selected in products.html, the redirects back to products page
+def delete_product(request, id):
+
+    return redirect('/dashboard/products')
