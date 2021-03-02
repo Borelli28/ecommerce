@@ -23,3 +23,8 @@ def order_show(request, id):
     context = {"id": id}
 
     return render(request, 'order_show.html', context)
+
+# Renders the products html
+def products(request):
+
+    return render(request, 'products.html')
