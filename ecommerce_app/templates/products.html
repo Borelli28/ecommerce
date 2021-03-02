@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <title>E-Commerce | Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'products_style.css' %}">
+  </head>
+
+  <body>
+
+    <!-- Navbar: dashboard, orders, products, logoff -->
+    <nav class="navbar navbar-expand-lg navbar-light .bg-transparent">
+      <div class="container-fluid navbar-color">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="dashboard/orders">Orders</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/dashboard/products">
+                Products
+              </a>
+            </li>
+          </ul>
+          <div class="nav-item">
+            <a class="nav-link active" id="logoff-hl" href="/clear">Log Off</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header: Search bar and add new product button -->
+    <header>
+      <!-- Search Bar -->
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-danger" type="submit">Search</button>
+      </form>
+
+      <button class="btn btn-danger" href="/add_product/1">Add New Product</button>
+    </header>
+
+    <!-- Main: Table of products -->
+    <main>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Picture</th>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Inventory Count</th>
+            <th scope="col">Quantity Sold</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <img src="../images/product-2.jpg" alt="product image">
+            </td>
+            <td>0273</td>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+            <td>
+              <a href="#">Edit |</a>
+              <a href="#">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+
+
+  </body>
+
+</html>
