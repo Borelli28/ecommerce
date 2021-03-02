@@ -39,6 +39,29 @@ main {
   justify-content: space-around;
 }
 
-  main table {
+  main #order-info {
+    width: 20%;
+    background-color: white;
+  }
+
+  main #display-order {
+    width: 60%;
+  }
+
+  #display-order table {
+    background-color: white;
+  }
+
+  main span {
+    /* the background color should change if it is shipped:green, else:red */
+    background-color: green;
+    color: white;
+    padding: 1%;
+    margin-top: 2%;
+  }
+
+  main #total {
+    margin-top: 4%;
+    background-color: white;
     width: 20%;
   }
