@@ -33,3 +33,8 @@ nav {
     background-color: #dc3545;
     border-radius: 4%;
   }
+
+table {
+  background-color: white;
+  text-align: center;
+}

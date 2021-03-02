@@ -1,0 +1,67 @@
+/* * {
+  outline: 1px dashed red;
+} */
+
+html {
+  height: 100%;
+}
+
+body {
+  background-color: #f1f3de;
+  color: #eb8f8f;
+}
+
+body h1, h2, h3, h4, h5, h6 {
+  color: #ec0101;
+}
+
+nav {
+  margin-bottom: 5%;
+}
+
+  /* Search bar & Buton */
+  nav form {
+    margin-right: 15%;
+    width: 35%;
+  }
+
+  /* nav a:link {
+    color: white;
+  } */
+  nav #logoff-hl {
+    color: white;
+    background-color: #dc3545;
+    border-radius: 4%;
+  }
+
+main {
+  display: flex;
+  justify-content: space-around;
+}
+
+  main #order-info {
+    width: 20%;
+    background-color: white;
+  }
+
+  main #display-order {
+    width: 60%;
+  }
+
+  #display-order table {
+    background-color: white;
+  }
+
+  main span {
+    /* the background color should change if it is shipped:green, else:red */
+    background-color: green;
+    color: white;
+    padding: 1%;
+    margin-top: 2%;
+  }
+
+  main #total {
+    margin-top: 4%;
+    background-color: white;
+    width: 20%;
+  }
