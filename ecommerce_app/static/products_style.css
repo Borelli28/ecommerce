@@ -40,7 +40,7 @@ header {
   justify-content: space-between;
 }
 
-  header form {
+  header #search-bar {
     width: 50%;
   }
 

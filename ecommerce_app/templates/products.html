@@ -38,12 +38,15 @@
     <!-- Header: Search bar and add new product button -->
     <header>
       <!-- Search Bar -->
-      <form class="d-flex">
+      <form class="d-flex" id="search-bar">
+        {% csrf_token %}
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-danger" type="submit">Search</button>
       </form>
-
-      <button class="btn btn-danger" href="/add_product/1">Add New Product</button>
+      <form action="/add_product" method="post" id="add-product">
+        {% csrf_token %}
+        <button class="btn btn-danger">Add New Product</button>
+      </form>
     </header>
 
     <!-- Main: Table of products -->

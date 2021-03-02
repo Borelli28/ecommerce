@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <title>Products | Add Product</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'add_product_style.css' %}">
+  </head>
+  <body>
+    <!-- Title & exit button -->
+    <header>
+      <h2>Add a New Product</h2>
+      <button class="btn btn-light"type="button" onclick="window.location.href='/dashboard/products'" name="button">X</button>
+    </header>
+    <!-- Form -->
+    <form action="/product_add" method="post">
+      {% csrf_token %}
+      <label for="name">Name</label>
+      <input type="text" name="name">
+
+      <label for="description">Description</label>
+      <textarea name="descritpion" rows="6" cols="60"></textarea>
+
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Categories
+        </button>
+        <!-- Categories drop down menu with bootstrap icons(pencil=edit, trash=delete) -->
+          <!-- When pencil or delete buttons are pressed it should display an alert... -->
+          <!-- asking the user if he wants to edit or delete the category -->
+        <ul class="dropdown-menu" id="cats-dropdown-menu">
+          <li><a class="dropdown-item" href="#" value="shirts">Shirts</a></li>
+        </ul>
+      </div>
+
+        <label for="add-cat">or add a new category:</label>
+        <input type="text" name="add-cat" id="add-cat">
+
+        <label for="upload-img">Image:</label>
+        <input type="file" id="product-img" name="upload-img">
+
+        <div id="form-buttons">
+          <button class="btn btn-light" type="button" onclick="window.location.href='/dashboard/products'"name="button"><a>Cancel</a></button>
+          <button class="btn btn-success" type="button" onclick="window.location.href='/dashboard/products'"name="button">Preview</button>
+          <button class="btn btn-danger" type="Submit" name="button">Add</button>
+        </div>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+  </body>
+</html>
