@@ -20,7 +20,7 @@ class ValidatorManager(models.Manager):
             errors["password"] = "Passwords do not match"
 
         # Check if email already exist in database
-        if Seller.objects.filter(postData['email']):
+        if Seller.objects.filter(email=postData['email']):
             errors["email"] = "Email already exist. Please enter a different email or Login In."
 
         return errors
@@ -31,8 +31,21 @@ class ValidatorManager(models.Manager):
         if len(postData['password']) < 8:
             errors["password"] = "Password should be at least 8 characters"
 
+        #DOES NOT WORK I INPUT THE RIGHT PASSWORD AND IT STILL TELLS ME: WRONG PASSWORD
+        # returns error message if passowrd does not exist in database
+        # if Seller.objects.filter(password=postData['password']):
+        #     pass
+        # else:
+        #     errors['password'] = "Wrong Password"
+
         if len(postData['email']) < 3:
-            errors['email'] = "Please enter a valid Email"
+            errors['email'] = "Please enter am Email longer than 3 characters"
+
+        # returns error message if the email does not exist in database
+        if Seller.objects.filter(email=postData['email']):
+            pass
+        else:
+            errors['email'] = "Wrong Email"
 
         return errors
 

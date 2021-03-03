@@ -43,6 +43,11 @@ form {
   border-radius: 5px;
 }
 
+#messages-section {
+  display: block;
+  text-align: center;
+}
+
 /* Override bootstrap form button colors */
 .btn-light {
   background-color: #eb8f8f; color: white;
