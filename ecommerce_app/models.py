@@ -1,5 +1,41 @@
 from django.db import models
 
+# python manage.py
+
+class ValidatorManager(models.Manager):
+
+    def seller_register_val(self, postData):
+        errors = {}
+
+        if len(postData['first_name']) < 2:
+            errors["first_name"] = "First Name should be at least 2 characters"
+
+        if len(postData['last_name']) < 2:
+            errors["last_name"] = "Last Name should be at least 2 characters"
+
+        if len(postData['password']) < 8:
+            errors["password"] = "Password should be at least 8 characters"
+
+        if postData['password'] != postData['confirm_password']:
+            errors["password"] = "Passwords do not match"
+
+        # Check if email already exist in database
+        if Seller.objects.filter(postData['email']):
+            errors["email"] = "Email already exist. Please enter a different email or Login In."
+
+        return errors
+
+    # def login_validator(self, postData):
+    #     errors = {}
+    #
+    #     if len(postData['password']) < 8:
+    #         errors["password"] = "Password should be at least 8 characters"
+    #
+    #     if len(postData['email']) < 3:
+    #         errors['email'] = "Please enter a valid Email"
+    #
+    #     return errors
+
 class Customer(models.Model):
 
     first_name = models.CharField(max_length=35)
@@ -19,6 +55,7 @@ class Seller(models.Model):
     password = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    objects = ValidatorManager()
 
 class Category(models.Model):
 
@@ -31,7 +68,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=19, decimal_places=2)
     inv_count = models.IntegerField()
-    img = FileField(upload_to='products_images/', null=True)
+    img = models.FileField(upload_to='products_images/', null=True)
     category = models.ForeignKey(Category, related_name="category", on_delete=models.CASCADE)
     desc = models.CharField(max_length=255)
     sold_by = models.ForeignKey(Seller, related_name="seller", on_delete=models.CASCADE)
@@ -41,14 +78,25 @@ class Product(models.Model):
 
 class Cart(models.Model):
 
-    customer = models.ForeignKey(Customer, related_name="customer", on_delete=models.CASCADE)
+    created_by = models.ForeignKey(Customer, related_name="customer", on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name="product", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 class Order(models.Model):
 
-    customer = models.ForeignKey(Cart, related_name="customer", on_delete=models.CASCADE)
-    seller = models.ForeignKey(Seller, related_name="seller", on_delete=models.CASCADE)
+    submitted_by = models.ForeignKey(Cart, related_name="the_customer", on_delete=models.CASCADE)
+    total = models.DecimalField(max_digits=19, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+# before order created and cart objects deleted, save all the products in Transactions()
+# by creating a Transactions instance
+class Transactions(models.Model):
+
+    bought_by  = models.ForeignKey(Customer, related_name="customer_id", on_delete=models.CASCADE)
+    sold_by = models.ForeignKey(Seller, related_name="seller_id", on_delete=models.CASCADE)
+    product_sold = models.ForeignKey(Product, related_name="product_id", on_delete=models.CASCADE)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
