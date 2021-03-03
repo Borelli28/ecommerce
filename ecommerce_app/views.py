@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-# from ecommerce_app.models import Seller
+from ecommerce_app.models import *
 from django.contrib import messages
 import bcrypt
 
@@ -43,7 +43,6 @@ def edit_product(request, id):
 def add_product(reques):
 
     return render(reques, 'add_product.html')
-
 
 """
 
@@ -91,9 +90,7 @@ def register_seller(request):
 # Edits Product and handles the POST data from products/edit_product form
 def product_edit(request):
 
-
     return redirect('/dashboard/products')
-
 
 # Delete product selected in products.html, the redirects back to products page
 def delete_product(request, id):
@@ -102,7 +99,6 @@ def delete_product(request, id):
 
 # Creates a new Product using the POST data from add a new product page form, and then redirects to products Page
 def create_product(request):
-
 
     return redirect('/dashboard/products')
 
