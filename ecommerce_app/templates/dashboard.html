@@ -50,22 +50,24 @@
         <!-- For the alt add the description of the product -->
         <img src="static/images/product-ex.webp" class="card-img-top" alt="...">
         <div class="card-body">
-          <h5 class="card-title">Product Name</h5>
-          <p class="card-text">Description of seller last product added to store</p>
+          <h5 class="card-title">{{ last_product.name }}</h5>
+          <p class="card-text">{{ last_product.desc }}</p>
           <a href="#" class="btn btn-danger">See Product</a>
         </div>
       </div>
 
       <!-- Most Purchase Item from Seller -->
+      {% for product in most_pur_product_seller %}
       <div class="card" style="width: 18rem;" id="most-purchased-item">
-        <h3>Most Purchased Product</h3>
+        <h3>Your Most Purchased Product</h3>
         <img src="static/images/product-ex.webp" class="card-img-top" alt="...">
         <div class="card-body">
-          <h5 class="card-title">Product Name</h5>
-          <p class="card-text">Description of seller most purchased item</p>
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.desc }}</p>
           <a href="#" class="btn btn-danger">See Product</a>
         </div>
       </div>
+      {% endfor %}
 
       <!-- Top three - all sellers - Most Purchased Products -->
       <section>
@@ -80,22 +82,22 @@
             <div class="carousel-item active">
               <img src="static/images/product-2.jpg" class="d-block w-100" alt="...">
               <div class="carousel-caption d-none d-md-block">
-                <h5>Product Name</h5>
-                <p>Product description...........</p>
+                <h5>{{ Product.Product.name  }}</h5>
+                <p>{{ Product.Product.desc }}</p>
               </div>
             </div>
             <div class="carousel-item">
               <img src="static/images/product-3.jpg" class="d-block w-100" alt="...">
               <div class="carousel-caption d-none d-md-block">
-                <h5>Product Name</h5>
-                <p>Product description...........</p>
+                <h5>{{ Product.Product.name  }}</h5>
+                <p>{{ Product.Product.desc }}</p>
               </div>
             </div>
             <div class="carousel-item">
               <img src="static/images/product-ex.webp" class="d-block w-100" alt="...">
               <div class="carousel-caption d-none d-md-block">
-                <h5>Product Name</h5>
-                <p>Product description...........</p>
+                <h5>{{ Product.Product.name  }}</h5>
+                <p>{{ Product.Product.desc }}</p>
               </div>
             </div>
           </div>

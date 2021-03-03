@@ -10,10 +10,65 @@ def login(request):
 
     return render(request, 'login.html')
 
-# Renders dashbaord html Page
+# Renders dashboard html Page. Also gives the data used to personalized the dashboard page
 def dashboard(request):
 
-    return render(request, 'dashboard.html')
+    all_products = Product.objects.all()
+    # mvps_products = []
+    #current login seller
+    log_seller_id = request.session['sellerid']
+    log_seller = Seller.objects.get(id=log_seller_id)
+    # Gets the most purchased product of the current seller, if the the seller has products posted in the DB.
+    if Product.objects.filter(sold_by=log_seller):
+        all_pur_counts = []
+        for product in all_products:
+            # if the product was posted by the login seller
+            if product.sold_by == Seller.objects.get(id=log_seller_id):
+                all_pur_counts.append(product.pur_count)
+        print(all_pur_counts)
+        # MAX() method get the greatest value in an array of integers
+        # so mvp has the greatest number in all the product purchases counts
+        mvp = max(all_pur_counts)
+        print(mvp)
+        # gets the instance of the most purchased product using the mvp integer
+        mvp_instance = all_products.filter(pur_count=mvp)
+        print(mvp_instance)
+
+    # now lets get the mvp product in between all sellers combined, if there is products in the database
+    if len(all_products) > 0:
+        # if there is at least three products in the database. Else just return the same element three times
+        if len(all_products) >=3:
+            all_pur_counts = []
+            for product in all_products:
+                all_pur_counts.append(product.pur_count)
+            print(all_pur_counts)
+            # MAX() method get the greatest value in an array of integers
+            # get the max value then pop it out of the array until we get the 3 largest values in the array
+            mvp = max(all_pur_counts)
+            print(mvp)
+            second_mvp = max(all_pur_counts)
+            third_mvp = max(all_pur_counts)
+            # gets the instance of the most purchased product using the mvp integer
+        else:
+            all_pur_counts = []
+            for product in all_products:
+                all_pur_counts.append(product.pur_count)
+            print(all_pur_counts)
+            # MAX() method get the greatest value in an array of integers
+            # get the max value then pop it out of the array until we get the 3 largest values in the array
+            mvp = max(all_pur_counts)
+            print(mvp)
+            mvp_instance = all_products.filter(pur_count=mvp)
+            mvps_products = [mvp_instance, mvp_instance, mvp_instance]
+            print(mvps_products)
+
+
+
+    # Pass: last product added, most purchased product & most purschased product from all sellers data.
+    context = {"last_product":Product.objects.last(), "most_pur_product_seller":mvp_instance, "all_mvp_product": mvps_products}
+
+
+    return render(request, 'dashboard.html', context)
 
 # Renders the orders page
 def orders(request):
@@ -114,7 +169,7 @@ def log_seller(request):
             print("inside the first if statement")
             if bcrypt.checkpw(request.POST['password'].encode(), logged_seller.password.encode()):
                 # if we get True after checking the password, we may put the user id in session
-                request.session['userid'] = logged_seller.id
+                request.session['sellerid'] = logged_seller.id
 
                 # saves email in session so we can use it to check if user is log-in in success.
                 request.session['email'] = request.POST['email']
