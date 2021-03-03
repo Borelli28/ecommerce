@@ -12,16 +12,6 @@
 
 
     <div id="registration">
-
-      <!-- Will display form error messages if any -->
-      {% if messages %}
-      <ul class="messages">
-          {% for message in messages %}
-              <li {% if message.tags %} class="{{ message.tags }} alert-danger"{% endif %}>{{ message }}</li>
-          {% endfor %}
-      </ul>
-      {% endif %}
-
       <h2>Register</h2>
 
       <form action="/add_user" method="post">
@@ -48,10 +38,18 @@
 
     </div>
 
+    <!-- Will display form error messages if any -->
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }} alert-danger"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
     <h1 id="title">Admin Login</h1>
 
     <div id="login">
-
       <h2>Login</h2>
 
       <form action="/log_user" method="post">
