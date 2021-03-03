@@ -25,20 +25,20 @@ class ValidatorManager(models.Manager):
 
         return errors
 
-    # def login_validator(self, postData):
-    #     errors = {}
-    #
-    #     if len(postData['password']) < 8:
-    #         errors["password"] = "Password should be at least 8 characters"
-    #
-    #     if len(postData['email']) < 3:
-    #         errors['email'] = "Please enter a valid Email"
-    #
-    #     return errors
+    def login_validator(self, postData):
+        errors = {}
+
+        if len(postData['password']) < 8:
+            errors["password"] = "Password should be at least 8 characters"
+
+        if len(postData['email']) < 3:
+            errors['email'] = "Please enter a valid Email"
+
+        return errors
 
 class Customer(models.Model):
 
-    first_name = models.CharField(max_length=35)
+    # first_name = models.CharField(max_length=35)
     last_name = models.CharField(max_length=35)
     email = models.EmailField(max_length=254)
     password = models.CharField(max_length=255)
@@ -97,6 +97,5 @@ class Transactions(models.Model):
     bought_by  = models.ForeignKey(Customer, related_name="customer_id", on_delete=models.CASCADE)
     sold_by = models.ForeignKey(Seller, related_name="seller_id", on_delete=models.CASCADE)
     product_sold = models.ForeignKey(Product, related_name="product_id", on_delete=models.CASCADE)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
