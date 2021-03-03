@@ -1,5 +1,3 @@
-
-
 /* * {
   outline: 1px dashed red;
 } */
@@ -37,6 +35,13 @@ form {
   form input {
     color: #ec0101;
   }
+
+#title {
+  background-color: white;
+  padding: 0.5%;
+  border: 2px solid #eb8f8f;
+  border-radius: 5px;
+}
 
 /* Override bootstrap form button colors */
 .btn-light {
