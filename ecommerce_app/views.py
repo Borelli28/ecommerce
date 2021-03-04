@@ -136,9 +136,11 @@ def edit_product(request, id):
     return render(request, 'edit_product.html', context)
 
 # Renders add new product Page
-def add_product(reques):
+def add_product(request):
 
-    return render(reques, 'add_product.html')
+    context = {"categories":Category.objects.all()}
+
+    return render(request, 'add_product.html', context)
 
 """
 
@@ -234,6 +236,36 @@ def delete_product(request, id):
 
 # Creates a new Product using the POST data from add a new product page form, and then redirects to products Page
 def create_product(request):
+
+    # grabs all post data
+    name = request.POST['name']
+    price = request.POST['price']
+    _inv_count = request.POST['inv_count']
+    _desc = request.POST['description']
+    #if the dropdown menu is empty, that means user wants to create new category
+    if request.POST['cat_sel'] == "blank":
+        print("cat_sel is blank")
+        # Checks if the user input something into add_cat Form
+        # If he didn't then redirect back to page
+        if len(request.POST['add-cat']) > 0:
+            _cat = request.POST['add-cat']
+            # create category instance:
+            new_cat = Category.objects.create(name=_cat)
+            print("Category Created:")
+            print(new_cat)
+        else:
+            print("User need to either create a new category or select one from the dropdown menu")
+            return redirect('/add_product')
+    else:
+        _cat = request.POST['cat_sel']
+    image = request.POST['upload-img']
+
+    print(name)
+    print(price)
+    print(_inv_count)
+    print(_desc)
+    print(_cat)
+    print(image)
 
     return redirect('/dashboard/products')
 
