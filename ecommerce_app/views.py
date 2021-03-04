@@ -80,22 +80,17 @@ def orders(request):
     all_orders = Order.objects.all()
 
     for order in all_orders:
-        # for each order it will grab each product id per order and add it to a list
-        order_with_products = order.product_ids
-        product_id_raw = order_with_products.replace(',', '')
-        products_ids_ls = list(product_id_raw)
+        # for each order it will grab that order product id
+        order_product = Product.objects.get(id=order.product_id)
 
+        our_seller = Seller.objects.get(id=request.session['sellerid'])
         seller_orders = []
-        # check for the order if one the products is sold_by our seller.
-        # if is sold by our seller then add the order to the seller order list
-        for i in products_ids_ls:
-            our_seller = Seller.objects.get(id=request.session['sellerid'])
-            curr_product = Product.objects.get(id=i)
-            # if the current product is sold by our seller and the current order is not already in our seller orders list
-            if curr_product.sold_by.first_name == our_seller.first_name and order not in seller_orders:
-                seller_orders.append(order)
-                print("Order added to seller orders")
-                print(order)
+        # if the current product is sold by our seller and the current order is not already in our seller orders list
+        # then add order to seller_orders
+        if order_product.sold_by.email == our_seller.email and order not in seller_orders:
+            seller_orders.append(order)
+            print("Order added to seller orders")
+            print(order)
     print("All seller orders:")
     print(seller_orders)
 
@@ -108,8 +103,12 @@ def order_show(request, id):
 
     order = Order.objects.get(id=id)
     customer = order.submitted_by
+    product_id = order.product_id
+    product = Product.objects.get(id=product_id)
 
-    context = {"order": order, "customer":customer}
+    total = order.total + 3
+
+    context = {"order": order, "customer":customer, "product":product, "order_total":total}
 
     return render(request, 'order_show.html', context)
 
