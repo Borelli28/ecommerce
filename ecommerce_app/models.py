@@ -81,10 +81,11 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=19, decimal_places=2)
     inv_count = models.IntegerField()
-    img = models.FileField(upload_to='products_images/', blank=True, default="no-product-image.png")
+    img = models.FileField(upload_to='static/images/products/', blank=True, default="no-product-image.png")
     category = models.ForeignKey(Category, related_name="category", on_delete=models.CASCADE)
     desc = models.CharField(max_length=255)
     sold_by = models.ForeignKey(Seller, related_name="seller", on_delete=models.CASCADE)
+    # Pur_cuont = Quantity Sold
     pur_count = models.IntegerField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

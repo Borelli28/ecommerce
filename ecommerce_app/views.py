@@ -101,11 +101,12 @@ def orders(request):
 # Render the display order Page
 def order_show(request, id):
 
+    # Using product id, get order, customer & and product
     order = Order.objects.get(id=id)
     customer = order.submitted_by
     product_id = order.product_id
     product = Product.objects.get(id=product_id)
-
+    #calculate total of order: order.total + $3 Shipping
     total = order.total + 3
 
     context = {"order": order, "customer":customer, "product":product, "order_total":total}
@@ -115,7 +116,17 @@ def order_show(request, id):
 # Renders the products html
 def products(request):
 
-    return render(request, 'products.html')
+    all_products = Product.objects.all()
+    our_seller = Seller.objects.get(id=request.session['sellerid'])
+    seller_products = []
+    # get the products of our seller
+    for product in all_products:
+        if product.sold_by.email == our_seller.email:
+            seller_products.append(product)
+    print(seller_products)
+    context = {"products":seller_products}
+
+    return render(request, 'products.html', context)
 
 # Renders the products/ edit_product page
 def edit_product(request, id):
