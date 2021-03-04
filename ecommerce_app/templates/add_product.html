@@ -14,7 +14,7 @@
       <button class="btn btn-light"type="button" onclick="window.location.href='/dashboard/products'" name="button">X</button>
     </header>
     <!-- Form -->
-    <form action="/product_add" method="post">
+    <form action="/product_add" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <label for="name">Name</label>
       <input type="text" name="name" required>
@@ -32,7 +32,7 @@
       <select name="cat_sel" id="cats-dropdown-menu" required>
         <option value="blank">Select One Category</option>
         {% for cat in categories %}
-        <option value="{{ cat.name }}">{{ cat.name.capitalize }}</option>
+        <option value="{{ cat.id }}">{{ cat.name.capitalize }}</option>
         {% endfor %}
       </select>
 

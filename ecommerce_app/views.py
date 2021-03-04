@@ -44,10 +44,11 @@ def dashboard(request):
             print(all_pur_counts)
             # MAX() method get the greatest value in an array of integers
             # get the max value then pop it out of the array until we get the 3 largest values in the array
-            mvp = max(all_pur_counts)
-            print(mvp)
-            second_mvp = max(all_pur_counts)
-            third_mvp = max(all_pur_counts)
+            mvp_one = max(all_pur_counts)
+            all_pur_counts.remove(mvp_one)
+            mvp_two = max(all_pur_counts)
+            all_pur_counts.remove(mvp_two)
+            mvp_three = max(all_pur_counts)
             # gets the instance of the most purchased product using the mvp integer
         # Else just return the same element three times
         else:
@@ -232,40 +233,65 @@ def product_edit(request):
 # Delete product selected in products.html, the redirects back to products page
 def delete_product(request, id):
 
+    # get the product instance using the id
+    product = Product.objects.get(id=id)
+
+    product.delete()
+
     return redirect('/dashboard/products')
 
 # Creates a new Product using the POST data from add a new product page form, and then redirects to products Page
 def create_product(request):
 
+    # current log-in seller:
+    seller = Seller.objects.get(id=request.session['sellerid'])
+
+
     # grabs all post data
     name = request.POST['name']
     price = request.POST['price']
-    _inv_count = request.POST['inv_count']
-    _desc = request.POST['description']
+    inv_count = request.POST['inv_count']
+    desc = request.POST['description']
     #if the dropdown menu is empty, that means user wants to create new category
     if request.POST['cat_sel'] == "blank":
         print("cat_sel is blank")
         # Checks if the user input something into add_cat Form
         # If he didn't then redirect back to page
         if len(request.POST['add-cat']) > 0:
-            _cat = request.POST['add-cat']
+            cat_post = request.POST['add-cat']
             # create category instance:
-            new_cat = Category.objects.create(name=_cat)
+            new_cat = Category.objects.create(name=cat_post)
+            _cat = new_cat
             print("Category Created:")
-            print(new_cat)
+            print(_cat)
         else:
             print("User need to either create a new category or select one from the dropdown menu")
             return redirect('/add_product')
     else:
-        _cat = request.POST['cat_sel']
-    image = request.POST['upload-img']
+        cat_id = request.POST['cat_sel']
+        _cat = Category.objects.get(id=int(cat_id))
+
+    image = request.FILES['upload-img']
 
     print(name)
     print(price)
-    print(_inv_count)
-    print(_desc)
+    print(inv_count)
+    print(desc)
     print(_cat)
     print(image)
+
+    # create product instance:
+    new_product = Product.objects.create(name=name, price=price, inv_count=inv_count, img=image, category=_cat, desc=desc, sold_by=seller, pur_count=0)
+
+    # name = models.CharField(max_length=100)
+    # price = models.DecimalField(max_digits=19, decimal_places=2)
+    # inv_count = models.IntegerField()
+    # img = models.FileField(upload_to='static/images/products/', blank=True, default="no-product-image.png")
+    # category = models.ForeignKey(Category, related_name="category", on_delete=models.CASCADE)
+    # desc = models.CharField(max_length=255)
+    # sold_by = models.ForeignKey(Seller, related_name="seller", on_delete=models.CASCADE)
+    # # Pur_count = Quantity Sold
+    # pur_count = models.IntegerField(blank=True)
 
     return redirect('/dashboard/products')
 
