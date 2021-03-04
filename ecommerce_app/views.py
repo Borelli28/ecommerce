@@ -78,18 +78,38 @@ def orders(request):
 
     # need to give the orders of the current seller, also the instance of the customer that make the order
     all_orders = Order.objects.all()
-    # iterate trough transactions and if sold_by == current seller,
-    # then
 
+    for order in all_orders:
+        # for each order it will grab each product id per order and add it to a list
+        order_with_products = order.product_ids
+        product_id_raw = order_with_products.replace(',', '')
+        products_ids_ls = list(product_id_raw)
 
-    # context = {"orders":}
+        seller_orders = []
+        # check for the order if one the products is sold_by our seller.
+        # if is sold by our seller then add the order to the seller order list
+        for i in products_ids_ls:
+            our_seller = Seller.objects.get(id=request.session['sellerid'])
+            curr_product = Product.objects.get(id=i)
+            # if the current product is sold by our seller and the current order is not already in our seller orders list
+            if curr_product.sold_by.first_name == our_seller.first_name and order not in seller_orders:
+                seller_orders.append(order)
+                print("Order added to seller orders")
+                print(order)
+    print("All seller orders:")
+    print(seller_orders)
 
-    return render(request, 'orders.html')
+    context = {"orders": seller_orders}
+
+    return render(request, 'orders.html', context)
 
 # Render the display order Page
 def order_show(request, id):
 
-    context = {"id": id}
+    order = Order.objects.get(id=id)
+    customer = order.submitted_by
+
+    context = {"order": order, "customer":customer}
 
     return render(request, 'order_show.html', context)
 

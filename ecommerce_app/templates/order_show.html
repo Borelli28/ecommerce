@@ -38,23 +38,17 @@
     <main>
       <div id="order-info">
 
-        <h2>Order ID: {{ id }}</h2>
+        <h2>Order ID: {{ order.id }}</h2>
 
         <div id="ship-info">
           <h4>Customer Shipping Info</h4>
-          <h5>Name</h5>
-          <h5>Address</h5>
-          <h5>City</h5>
-          <h5>State</h5>
-          <h5>Zip</h5>
+          <h5>Name: {{ customer.first_name }} {{ customer.last_name }}</h5>
+          <h5>Address: {{ customer.ship_addr }}</h5>
         </div>
         <div id="bill-info">
           <h4>Customer Billing Info</h4>
-          <h5>Name</h5>
-          <h5>Address</h5>
-          <h5>City</h5>
-          <h5>State</h5>
-          <h5>Zip</h5>
+          <h5>Name: {{ customer.first_name }} {{ customer.last_name }}</h5>
+          <h5>Address: {{ customer.ship_addr }}</h5>
         </div>
 
       </div>
@@ -74,11 +68,11 @@
           </thead>
           <tbody>
             <tr>
-              <td>0273</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
+              <td>{{ order.id }}</th>
+              <td>{{ order. }}</td>
+              <td>{{ order.id }}</td>
+              <td>{{ order.id }}</td>
+              <td>{{ order.total }}</td>
             </tr>
           </tbody>
         </table>
@@ -88,7 +82,7 @@
 
         <!-- total -->
         <div id="total">
-          <h6>Sub Total: $</h6>
+          <h6>Sub Total: ${{ order.total }}</h6>
           <h6>Shipping: $</h6>
           <h6>Total: $</h6>
         </div>
