@@ -29,6 +29,11 @@ form {
     height: 100%;
   }
 
+  form #cats-dropdown-menu {
+    display: block;
+    margin: 1% 35%;
+  }
+
   form #add-cat {
     width: 25%;
   }
