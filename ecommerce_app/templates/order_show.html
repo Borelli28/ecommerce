@@ -62,17 +62,13 @@
               <th scope="col">ID</th>
               <th scope="col">Item</th>
               <th scope="col">Price</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Total</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{{ order.id }}</th>
-              <td>{{ order. }}</td>
-              <td>{{ order.id }}</td>
-              <td>{{ order.id }}</td>
-              <td>{{ order.total }}</td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.price}}</td>
             </tr>
           </tbody>
         </table>
@@ -83,8 +79,8 @@
         <!-- total -->
         <div id="total">
           <h6>Sub Total: ${{ order.total }}</h6>
-          <h6>Shipping: $</h6>
-          <h6>Total: $</h6>
+          <h6>Shipping: $3.00</h6>
+          <h6>Total: ${{ order_total }}</h6>
         </div>
 
       </div>

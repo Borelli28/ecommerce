@@ -93,7 +93,7 @@ class Order(models.Model):
 
     submitted_by = models.ForeignKey(Customer, related_name="customer", on_delete=models.CASCADE)
     #product ids in a string, but separated by a coma: "1,5,2,13"
-    product_ids = models.CharField(max_length=255)
+    product_id = models.IntegerField()
     total = models.DecimalField(max_digits=19, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
