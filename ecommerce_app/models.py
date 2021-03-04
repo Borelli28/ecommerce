@@ -51,11 +51,11 @@ class ValidatorManager(models.Manager):
 
 class Customer(models.Model):
 
-    # first_name = models.CharField(max_length=35)
+    first_name = models.CharField(max_length=35)
     last_name = models.CharField(max_length=35)
     email = models.EmailField(max_length=254)
     password = models.CharField(max_length=255)
-    shipp_addr = models.CharField(max_length=255)
+    ship_addr = models.CharField(max_length=255)
     bill_addr = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -81,7 +81,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=19, decimal_places=2)
     inv_count = models.IntegerField()
-    img = models.FileField(upload_to='products_images/', null=True)
+    img = models.FileField(upload_to='products_images/', blank=True, default="no-product-image.png")
     category = models.ForeignKey(Category, related_name="category", on_delete=models.CASCADE)
     desc = models.CharField(max_length=255)
     sold_by = models.ForeignKey(Seller, related_name="seller", on_delete=models.CASCADE)
@@ -89,26 +89,11 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-class Cart(models.Model):
-
-    created_by = models.ForeignKey(Customer, related_name="customer", on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, related_name="product", on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
 class Order(models.Model):
 
-    submitted_by = models.ForeignKey(Cart, related_name="the_customer", on_delete=models.CASCADE)
+    submitted_by = models.ForeignKey(Customer, related_name="customer", on_delete=models.CASCADE)
+    #product ids in a string, but separated by a coma: "1,5,2,13"
+    product_ids = models.CharField(max_length=255)
     total = models.DecimalField(max_digits=19, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-# before order created and cart objects deleted, save all the products in Transactions()
-# by creating a Transactions instance
-class Transactions(models.Model):
-
-    bought_by  = models.ForeignKey(Customer, related_name="customer_id", on_delete=models.CASCADE)
-    sold_by = models.ForeignKey(Seller, related_name="seller_id", on_delete=models.CASCADE)
-    product_sold = models.ForeignKey(Product, related_name="product_id", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

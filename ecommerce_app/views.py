@@ -49,6 +49,7 @@ def dashboard(request):
             second_mvp = max(all_pur_counts)
             third_mvp = max(all_pur_counts)
             # gets the instance of the most purchased product using the mvp integer
+        # Else just return the same element three times
         else:
             all_pur_counts = []
             for product in all_products:
@@ -57,21 +58,31 @@ def dashboard(request):
             # MAX() method get the greatest value in an array of integers
             # get the max value then pop it out of the array until we get the 3 largest values in the array
             mvp = max(all_pur_counts)
-            print(mvp)
-            mvp_instance = all_products.filter(pur_count=mvp)
-            mvps_products = [mvp_instance, mvp_instance, mvp_instance]
-            print(mvps_products)
+            mvp_one = all_products.filter(pur_count=mvp)
+            mvp_two = all_products.filter(pur_count=mvp)
+            mvp_three = all_products.filter(pur_count=mvp)
+            print(mvp_one)
+            print(mvp_two)
+            print(mvp_three)
 
 
 
     # Pass: last product added, most purchased product & most purschased product from all sellers data.
-    context = {"last_product":Product.objects.last(), "most_pur_product_seller":mvp_instance, "all_mvp_product": mvps_products}
+    context = {"last_product":Product.objects.last(), "most_pur_product_seller":mvp_instance, "mvp_one": mvp_one, "mvp_two": mvp_two, "mvp_three": mvp_three}
 
 
     return render(request, 'dashboard.html', context)
 
-# Renders the orders page
+# Renders the orders page and shows orders info
 def orders(request):
+
+    # need to give the orders of the current seller, also the instance of the customer that make the order
+    all_orders = Order.objects.all()
+    # iterate trough transactions and if sold_by == current seller,
+    # then
+
+
+    # context = {"orders":}
 
     return render(request, 'orders.html')
 
@@ -141,7 +152,7 @@ def register_seller(request):
         print("Seller Created:")
         print(Seller.objects.last())
 
-        return redirect('/dashboard')
+        return redirect('/')
 
 # handles the data from seller login form in login.html
 def log_seller(request):
