@@ -63,19 +63,21 @@
           </tr>
         </thead>
         <tbody>
+          {% for product in products %}
           <tr>
             <td>
-              <img src="../images/product-2.jpg" alt="product image">
+              <img src="static/images/{{ product.img }}" alt="{{ product.name }} product image">
             </td>
-            <td>0273</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.inv_count }}</td>
+            <td>{{ product.pur_count }}</td>
             <td>
               <a href="/dashboard/products/edit_product/1">Edit |</a>
               <a href="/dashboard/products/delete_product/1">Delete</a>
             </td>
           </tr>
+          {% endfor %}
         </tbody>
       </table>
     </main>
