@@ -17,5 +17,10 @@ urlpatterns = [
     path('product_edit/<int:id>', views.product_edit),
     path('add_product', views.add_product),
     path('product_add', views.create_product),
-    path('update_status_order/<int:id>', views.update_status_order)
+    path('update_status_order/<int:id>', views.update_status_order),
+
+    # Customer site
+    path('login', views.login_page),
+    path('home', views.home)
+
 ]

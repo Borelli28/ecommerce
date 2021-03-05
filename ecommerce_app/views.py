@@ -403,3 +403,28 @@ def clear(request):
     print("Session cleared")
 
     return redirect('/')
+
+
+
+'''
+
+
+Customer site methods
+
+
+'''
+
+# renders customer login page
+def login_page(request):
+
+    return render(request, 'customer_templates/login.html')
+
+# renders the customer site home Page
+def home(request):
+
+    all_products = Product.objects.all()
+    all_cats = Category.objects.all()
+
+    context = {"products":all_products, "cats":all_cats}
+
+    return render(request, 'customer_templates/home.html', context)

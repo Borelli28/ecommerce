@@ -1,0 +1,32 @@
+* {
+  outline: 1px dashed red;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+}
+main {
+  display: flex;
+}
+  main #categories-search {
+    display: block;
+    outline: 2px dashed blue;
+    width: 20%;
+    margin: 2% 1%;
+  }
+
+  main #products-section {
+    width: 20%;
+    display: block;
+    text-align: center;
+  }
+
+  main #product-price {
+    opacity: 0.5;
+  }
