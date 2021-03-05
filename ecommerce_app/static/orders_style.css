@@ -38,3 +38,8 @@ table {
   background-color: white;
   text-align: center;
 }
+
+  table form {
+    display: flex;
+    width: 75%;
+  }

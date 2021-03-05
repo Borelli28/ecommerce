@@ -58,17 +58,17 @@
           <td>{{ order.total }}</td>
           <!--  Status drop down menu -->
           <td>
-            <div class="dropdown">
-              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                Select
-              </a>
-
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <li><a class="dropdown-item" href="#">Order in Process</a></li>
-                <li><a class="dropdown-item" href="#">Shipped</a></li>
-                <li><a class="dropdown-item" href="#">Cancel</a></li>
-              </ul>
-            </div>
+            <!-- Submit the status of the order -->
+            <form action="/update_status_order/{{ order.id }}" method="post">
+              {% csrf_token %}
+              <select class="form-select" name="order_status">
+                <option selected>Current Status: {{ order.status }}</option>
+                <option value="in-process">Processing Order</option>
+                <option value="shipped">Shipped</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <button class="btn btn-danger" type="submit" name="button">Update</button>
+            </form>
           </td>
         </tr>
         {% endfor %}
