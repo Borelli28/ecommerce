@@ -32,7 +32,7 @@ class ValidatorManager(models.Manager):
             errors["password"] = "Password should be at least 8 characters"
 
         #DOES NOT WORK I INPUT THE RIGHT PASSWORD AND IT STILL TELLS ME: WRONG PASSWORD
-        # returns error message if passowrd does not exist in database
+        # returns error message if password does not exist in database
         # if Seller.objects.filter(password=postData['password']):
         #     pass
         # else:
@@ -46,6 +46,26 @@ class ValidatorManager(models.Manager):
             pass
         else:
             errors['email'] = "Wrong Email"
+
+        return errors
+
+    def add_product_validator(self, postData):
+        errors = {}
+
+        if len(postData['name']) < 2:
+            errors["name"] = "Product Name should be at least 2 characters long"
+
+        if len(postData['price']) < 1:
+            errors["price"] = "Please input a valid price for the product"
+
+        if len(postData['inv_count']) < 1:
+            errors["inv_count"] = "Please enter a valid input for Inventory Count"
+
+        if len(postData['description']) < 1:
+            errors["description"] = "Please enter a description for the product"
+
+        if len(postData['cat_sel']) < 1 and len(postData['add_cat']) < 1:
+            errors["cat_sel"] = "Please either select one Category from the dropdown menu or create a new category"
 
         return errors
 
@@ -89,6 +109,7 @@ class Product(models.Model):
     pur_count = models.IntegerField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    objects = ValidatorManager()
 
 class Order(models.Model):
 
