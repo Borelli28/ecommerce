@@ -189,7 +189,6 @@ def register_seller(request):
 
     else:
         # if the errors object is empty, that means there were no errors!
-        # retrieve the blog to be updated, make the changes, and save
 
         _first_name = request.POST['first_name']
         _last_name = request.POST['last_name']
@@ -328,47 +327,58 @@ def delete_product(request, id):
 # Creates a new Product using the POST data from add a new product page form, and then redirects to products Page
 def create_product(request):
 
-    # current log-in seller:
-    seller = Seller.objects.get(id=request.session['sellerid'])
-
-
-    # grabs all post data
-    name = request.POST['name']
-    price = request.POST['price']
-    inv_count = request.POST['inv_count']
-    desc = request.POST['description']
-    #if the dropdown menu is empty, that means user wants to create new category
-    if request.POST['cat_sel'] == "blank":
-        print("cat_sel is blank")
-        # Checks if the user input something into add_cat Form
-        # If he didn't then redirect back to page
-        if len(request.POST['add-cat']) > 0:
-            cat_post = request.POST['add-cat']
-            # create category instance:
-            new_cat = Category.objects.create(name=cat_post)
-            _cat = new_cat
-            print("Category Created:")
-            print(_cat)
-        else:
-            print("User need to either create a new category or select one from the dropdown menu")
+        # pass the post data to the method we wrote and save the response in a variable called errors
+        errors = Product.objects.add_product_validator(request.POST)
+        # check if the errors dictionary has anything in it
+        if len(errors) > 0:
+            # if the errors dictionary contains anything, loop through each key-value pair and make a flash message
+            for key, value in errors.items():
+                messages.error(request, value)
+            # redirect the user back to the form to fix the errors
             return redirect('/add_product')
-    else:
-        cat_id = request.POST['cat_sel']
-        _cat = Category.objects.get(id=int(cat_id))
 
-    image = request.FILES['upload-img']
+        else:
+            # current log-in seller:
+            seller = Seller.objects.get(id=request.session['sellerid'])
 
-    print(name)
-    print(price)
-    print(inv_count)
-    print(desc)
-    print(_cat)
-    print(image)
 
-    # create product instance:
-    new_product = Product.objects.create(name=name, price=price, inv_count=inv_count, img=image, category=_cat, desc=desc, sold_by=seller, pur_count=0)
+            # grabs all post data
+            name = request.POST['name']
+            price = request.POST['price']
+            inv_count = request.POST['inv_count']
+            desc = request.POST['description']
+            #if the dropdown menu is empty, that means user wants to create new category
+            if request.POST['cat_sel'] == "blank":
+                print("cat_sel is blank")
+                # Checks if the user input something into add_cat Form
+                # If he didn't then redirect back to page
+                if len(request.POST['add-cat']) > 0:
+                    cat_post = request.POST['add-cat']
+                    # create category instance:
+                    new_cat = Category.objects.create(name=cat_post)
+                    _cat = new_cat
+                    print("Category Created:")
+                    print(_cat)
+                else:
+                    print("User need to either create a new category or select one from the dropdown menu")
+                    return redirect('/add_product')
+            else:
+                cat_id = request.POST['cat_sel']
+                _cat = Category.objects.get(id=int(cat_id))
 
-    return redirect('/dashboard/products')
+            image = request.FILES['upload-img']
+
+            print(name)
+            print(price)
+            print(inv_count)
+            print(desc)
+            print(_cat)
+            print(image)
+
+            # create product instance:
+            new_product = Product.objects.create(name=name, price=price, inv_count=inv_count, img=image, category=_cat, desc=desc, sold_by=seller, pur_count=0)
+
+            return redirect('/dashboard/products')
 
 # Handles the post data from orders.html select status Form
 def update_status_order(request, id):
