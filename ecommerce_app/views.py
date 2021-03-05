@@ -14,6 +14,7 @@ def login(request):
 def dashboard(request):
 
     all_products = Product.objects.all()
+
     # mvps_products = []
     #current login seller
     log_seller_id = request.session['sellerid']
@@ -26,7 +27,12 @@ def dashboard(request):
             all_products_seller = []
             # if the product was posted by the login seller
             if product.sold_by == Seller.objects.get(id=log_seller_id):
+                all_products_seller.append(product)
                 all_pur_counts.append(product.pur_count)
+
+                # get the last product added from the seller:
+                seller_last_prod = all_products_seller[-1]
+
             if product.sold_by == Seller.objects.get(id=log_seller_id):
                 print(all_pur_counts)
                 # MAX() method get the greatest value in an array of integers
@@ -34,16 +40,13 @@ def dashboard(request):
                 mvp = max(all_pur_counts)
                 print(mvp)
                 # gets the instance of the most purchased product using the mvp integer
-                #need to change this because is will get all the instance that match mvp.
-                # we only need one instance
-                #get the id or the name of the product
                 mvp_instance_raw = all_products.filter(pur_count=mvp)
                 # check the mvp_instance_raw is a product sold_by seller
                 for i in mvp_instance_raw:
                     if i.sold_by:
                         mvp_instance = i
-                        print("MVP Instance:")
-                        print(mvp_instance)
+                        # print("MVP Instance:")
+                        # print(mvp_instance)
 
     # now lets get the mvp product in between all sellers combined, if there is products in the database
     if len(all_products) > 0:
@@ -78,7 +81,7 @@ def dashboard(request):
             # print(mvp_three)
 
     # Pass: last product added, most purchased product & most purschased product from all sellers data.
-    context = {"last_product":Product.objects.last(), "most_pur_product_seller":mvp_instance, "mvp_one": mvp_one, "mvp_two": mvp_two, "mvp_three": mvp_three}
+    context = {"last_product":seller_last_prod, "most_pur_product_seller":mvp_instance, "mvp_one": mvp_one, "mvp_two": mvp_two, "mvp_three": mvp_three}
 
 
     return render(request, 'seller_templates/dashboard.html', context)
