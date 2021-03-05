@@ -73,8 +73,9 @@
           </tbody>
         </table>
 
-        <!-- status -->
-        <span>Status: Shipped</span>
+        <!-- Order Status -->
+          <!-- If order in-process: grey, Shipped:green, Cancelled:red  -->
+          <span style="background-color:{{ color }};">Status: {{ order.status.capitalize }}</span>
 
         <!-- total -->
         <div id="total">

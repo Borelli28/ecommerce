@@ -108,7 +108,16 @@ def order_show(request, id):
     #calculate total of order: order.total + $3 Shipping
     total = order.total + 3
 
-    context = {"order": order, "customer":customer, "product":product, "order_total":total}
+    # this color is used in the page in the status of the order
+    color = "white"
+    if order.status == "in-process":
+        color = "grey"
+    elif order.status == "shipped":
+        color = "green"
+    elif order.status == "cancelled":
+        color = "red"
+
+    context = {"order": order, "customer":customer, "product":product, "order_total":total, "color": color}
 
     return render(request, 'order_show.html', context)
 
