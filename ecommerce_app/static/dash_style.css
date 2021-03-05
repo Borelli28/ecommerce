@@ -11,6 +11,11 @@ body {
   color: #eb8f8f;
 }
 
+/* img {
+  height: 100%;
+  width: 100%;
+} */
+
 body h1, h2, h3, h4, h5, h6 {
   color: #ec0101;
 }
