@@ -90,8 +90,6 @@ def orders(request):
         # then add order to seller_orders
         if order_product.sold_by.email == our_seller.email and order not in seller_orders:
             seller_orders.append(order)
-            print("Order added to seller orders")
-            print(order)
     print("All seller orders:")
     print(seller_orders)
 
@@ -347,6 +345,22 @@ def create_product(request):
     new_product = Product.objects.create(name=name, price=price, inv_count=inv_count, img=image, category=_cat, desc=desc, sold_by=seller, pur_count=0)
 
     return redirect('/dashboard/products')
+
+# Handles the post data from orders.html select status Form
+def update_status_order(request, id):
+
+    # gets the instance of the order using the id
+    order = Order.objects.get(id=id)
+
+    # if post data is not empty, update the order.status with the post status
+    if len(request.POST['order_status']) > 0:
+        post_status = request.POST['order_status']
+        order.status = post_status
+        order.save()
+        print("Order status updated to:")
+        print(post_status)
+
+    return redirect('/dashboard/orders')
 
 # Clear all data in session
 def clear(request):

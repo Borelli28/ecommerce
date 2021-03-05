@@ -85,7 +85,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, related_name="category", on_delete=models.CASCADE)
     desc = models.CharField(max_length=255)
     sold_by = models.ForeignKey(Seller, related_name="seller", on_delete=models.CASCADE)
-    # Pur_cuont = Quantity Sold
+    # Pur_count = Quantity Sold
     pur_count = models.IntegerField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -96,5 +96,7 @@ class Order(models.Model):
     #product ids in a string, but separated by a coma: "1,5,2,13"
     product_id = models.IntegerField()
     total = models.DecimalField(max_digits=19, decimal_places=2)
+    # in-process, shipped or cancelled
+    status = models.CharField(max_length=10 ,default="in-process")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

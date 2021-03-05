@@ -29,7 +29,7 @@
       <textarea name="description" rows="6" cols="60"></textarea required>
 
       <label for="cat_sel">Categories</label>
-      <select name="cat_sel" id="cats-dropdown-menu" required>
+      <select class="form-select" name="cat_sel" id="cats-dropdown-menu" required>
         <option value="blank">Select One Category</option>
         {% for cat in categories %}
         <option value="{{ cat.id }}">{{ cat.name.capitalize }}</option>
