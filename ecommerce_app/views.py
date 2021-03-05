@@ -132,7 +132,13 @@ def products(request):
 # Renders the products/ edit_product page
 def edit_product(request, id):
 
-    context = {"id": id}
+    # get product instance
+    product = Product.objects.get(id=id)
+
+    # get Categories
+    cats = Category.objects.all()
+
+    context = {"product": product, "cats": cats}
 
     return render(request, 'edit_product.html', context)
 
@@ -226,7 +232,64 @@ def log_seller(request):
     return redirect('/')
 
 # Edits Product and handles the POST data from products/edit_product form
-def product_edit(request):
+def product_edit(request, id):
+
+    # get the instance using the id
+    product = Product.objects.get(id=id)
+
+    # current log-in seller:
+    seller = Seller.objects.get(id=request.session['sellerid'])
+
+
+    # grabs all post data and edits the field if a value is given in POST
+    if len(request.POST['name']) > 0:
+        post_name = request.POST['name']
+        product.name = post_name
+        product.save()
+
+    if len(request.POST['price']) > 0:
+        post_price = request.POST['price']
+        product.price = post_price
+        product.save()
+    if len(request.POST['inv_count']) > 0:
+        post_inv_count = request.POST['inv_count']
+        product.inv_count = post_inv_count
+        product.save()
+    if len(request.POST['description']) > 0:
+        post_desc = request.POST['description']
+        product.desc = post_desc
+        product.save()
+    # if the dropdown menu is empty, that means user wants to create new category
+    # because he did not select any categories from dropdown-menu
+    if request.POST['cat_sel'] == "blank" and len(request.POST['add-cat']) > 0:
+        print("cat_sel is blank")
+        # Checks if the user input something into add_cat Form
+        # If he didn't then redirect back to page
+        if len(request.POST['add-cat']) > 0:
+            cat_post = request.POST['add-cat']
+            # create category instance:
+            new_cat = Category.objects.create(name=cat_post)
+            _cat = new_cat
+            print("Category Created:")
+            print(_cat)
+            product.category = _cat
+            product.save()
+        else:
+            print("User need to either create a new category or select one from the dropdown menu")
+            return redirect('/add_product')
+    elif request.POST['cat_sel'] != "blank":
+        cat_id = request.POST['cat_sel']
+        _cat = Category.objects.get(id=int(cat_id))
+        product.category = _cat
+        product.save()
+
+    if 'image' in request.POST:
+        image = request.FILES['upload-img']
+        product.img = image
+        product.save()
+
+    print("Product has being edited:")
+    print(product)
 
     return redirect('/dashboard/products')
 
@@ -282,16 +345,6 @@ def create_product(request):
 
     # create product instance:
     new_product = Product.objects.create(name=name, price=price, inv_count=inv_count, img=image, category=_cat, desc=desc, sold_by=seller, pur_count=0)
-
-    # name = models.CharField(max_length=100)
-    # price = models.DecimalField(max_digits=19, decimal_places=2)
-    # inv_count = models.IntegerField()
-    # img = models.FileField(upload_to='static/images/products/', blank=True, default="no-product-image.png")
-    # category = models.ForeignKey(Category, related_name="category", on_delete=models.CASCADE)
-    # desc = models.CharField(max_length=255)
-    # sold_by = models.ForeignKey(Seller, related_name="seller", on_delete=models.CASCADE)
-    # # Pur_count = Quantity Sold
-    # pur_count = models.IntegerField(blank=True)
 
     return redirect('/dashboard/products')
 
