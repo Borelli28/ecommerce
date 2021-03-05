@@ -8,7 +8,7 @@ import bcrypt
 # renders login page
 def login(request):
 
-    return render(request, 'login.html')
+    return render(request, 'seller_templates/login.html')
 
 # Renders dashboard html Page. Also gives the data used to personalized the dashboard page
 def dashboard(request):
@@ -18,21 +18,32 @@ def dashboard(request):
     #current login seller
     log_seller_id = request.session['sellerid']
     log_seller = Seller.objects.get(id=log_seller_id)
+    mvp_instance = ""
     # Gets the most purchased product of the current seller, if the the seller has products posted in the DB.
     if Product.objects.filter(sold_by=log_seller):
         all_pur_counts = []
         for product in all_products:
+            all_products_seller = []
             # if the product was posted by the login seller
             if product.sold_by == Seller.objects.get(id=log_seller_id):
                 all_pur_counts.append(product.pur_count)
-        print(all_pur_counts)
-        # MAX() method get the greatest value in an array of integers
-        # so mvp has the greatest number in all the product purchases counts
-        mvp = max(all_pur_counts)
-        print(mvp)
-        # gets the instance of the most purchased product using the mvp integer
-        mvp_instance = all_products.filter(pur_count=mvp)
-        print(mvp_instance)
+            if product.sold_by == Seller.objects.get(id=log_seller_id):
+                print(all_pur_counts)
+                # MAX() method get the greatest value in an array of integers
+                # so mvp has the greatest number in all the product purchases counts
+                mvp = max(all_pur_counts)
+                print(mvp)
+                # gets the instance of the most purchased product using the mvp integer
+                #need to change this because is will get all the instance that match mvp.
+                # we only need one instance
+                #get the id or the name of the product
+                mvp_instance_raw = all_products.filter(pur_count=mvp)
+                # check the mvp_instance_raw is a product sold_by seller
+                for i in mvp_instance_raw:
+                    if i.sold_by:
+                        mvp_instance = i
+                        print("MVP Instance:")
+                        print(mvp_instance)
 
     # now lets get the mvp product in between all sellers combined, if there is products in the database
     if len(all_products) > 0:
@@ -41,7 +52,7 @@ def dashboard(request):
             all_pur_counts = []
             for product in all_products:
                 all_pur_counts.append(product.pur_count)
-            print(all_pur_counts)
+            # print(all_pur_counts)
             # MAX() method get the greatest value in an array of integers
             # get the max value then pop it out of the array until we get the 3 largest values in the array
             mvp_one = max(all_pur_counts)
@@ -55,24 +66,22 @@ def dashboard(request):
             all_pur_counts = []
             for product in all_products:
                 all_pur_counts.append(product.pur_count)
-            print(all_pur_counts)
+            # print(all_pur_counts)
             # MAX() method get the greatest value in an array of integers
             # get the max value then pop it out of the array until we get the 3 largest values in the array
             mvp = max(all_pur_counts)
             mvp_one = all_products.filter(pur_count=mvp)
             mvp_two = all_products.filter(pur_count=mvp)
             mvp_three = all_products.filter(pur_count=mvp)
-            print(mvp_one)
-            print(mvp_two)
-            print(mvp_three)
-
-
+            # print(mvp_one)
+            # print(mvp_two)
+            # print(mvp_three)
 
     # Pass: last product added, most purchased product & most purschased product from all sellers data.
     context = {"last_product":Product.objects.last(), "most_pur_product_seller":mvp_instance, "mvp_one": mvp_one, "mvp_two": mvp_two, "mvp_three": mvp_three}
 
 
-    return render(request, 'dashboard.html', context)
+    return render(request, 'seller_templates/dashboard.html', context)
 
 # Renders the orders page and shows orders info
 def orders(request):
@@ -95,7 +104,7 @@ def orders(request):
 
     context = {"orders": seller_orders}
 
-    return render(request, 'orders.html', context)
+    return render(request, 'seller_templates/orders.html', context)
 
 # Render the display order Page
 def order_show(request, id):
@@ -119,7 +128,7 @@ def order_show(request, id):
 
     context = {"order": order, "customer":customer, "product":product, "order_total":total, "color": color}
 
-    return render(request, 'order_show.html', context)
+    return render(request, 'seller_templates/order_show.html', context)
 
 # Renders the products html
 def products(request):
@@ -134,7 +143,7 @@ def products(request):
     print(seller_products)
     context = {"products":seller_products}
 
-    return render(request, 'products.html', context)
+    return render(request, 'seller_templates/products.html', context)
 
 # Renders the products/ edit_product page
 def edit_product(request, id):
@@ -147,14 +156,14 @@ def edit_product(request, id):
 
     context = {"product": product, "cats": cats}
 
-    return render(request, 'edit_product.html', context)
+    return render(request, 'seller_templates/edit_product.html', context)
 
 # Renders add new product Page
 def add_product(request):
 
     context = {"categories":Category.objects.all()}
 
-    return render(request, 'add_product.html', context)
+    return render(request, 'seller_templates/add_product.html', context)
 
 """
 
@@ -187,7 +196,7 @@ def register_seller(request):
         # Hash the password using bcrypt
         pw_hash = bcrypt.hashpw(_password.encode(), bcrypt.gensalt()).decode()
         # Create the object instance
-        Seller.objects.create(first_name=_first_name, last_name=_last_name, email=_email, password=pw_hash)
+        seller = Seller.objects.create(first_name=_first_name, last_name=_last_name, email=_email, password=pw_hash)
 
         print("POST data:")
         print(_first_name)
@@ -198,7 +207,10 @@ def register_seller(request):
         print("Seller Created:")
         print(Seller.objects.last())
 
-        return redirect('/')
+        # save the sellerid in session
+        request.session['sellerid'] = seller.id
+
+        return redirect('/dashboard')
 
 # handles the data from seller login form in login.html
 def log_seller(request):

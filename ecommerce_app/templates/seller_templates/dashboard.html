@@ -57,17 +57,15 @@
       </div>
 
       <!-- Most Purchase Item from Seller -->
-      {% for product in most_pur_product_seller %}
       <div class="card" style="width: 18rem;" id="most-purchased-item">
         <h3>Your Most Purchased Product</h3>
         <img src="static/images/products/{{ product.img }}" class="card-img-top" alt="Product Image">
         <div class="card-body">
-          <h5 class="card-title">{{ product.name }}</h5>
-          <p class="card-text">{{ product.desc }}</p>
+          <h5 class="card-title">{{ most_pur_product_seller.name }}</h5>
+          <p class="card-text">{{ most_pur_product_seller.desc }}</p>
           <a href="#" class="btn btn-danger">See Product</a>
         </div>
       </div>
-      {% endfor %}
 
       <!-- Top three - all sellers - Most Purchased Products -->
       <section>
