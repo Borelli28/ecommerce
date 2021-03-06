@@ -1,0 +1,56 @@
+/* * {
+  outline: 1px dashed red;
+} */
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: #f1f3de;
+  color: #eb8f8f;
+}
+
+  body h1,h2,h3,h4,h5,h6 {
+    color: #ec0101;
+  }
+  /*  make text stand out */
+  body p,label {
+    text-shadow: 1px 1px black;
+    font-weight: number;
+  }
+
+nav {
+  display: flex;
+  justify-content: space-between;
+}
+main {
+  display: flex;
+}
+  main #categories-search {
+    display: block;
+    width: 20%;
+    margin: 2% 1%;
+  }
+
+  main #products-section {
+    width: 80%;
+    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  main #products-lineup {
+    width: 25%;
+    display: block;
+    border: 1px solid black;
+    margin: 0 1%;
+    background-color: white;
+  }
+
+  main #product-price {
+    opacity: 0.5;
+  }

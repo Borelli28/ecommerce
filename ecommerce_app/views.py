@@ -428,3 +428,8 @@ def home(request):
     context = {"products":all_products, "cats":all_cats}
 
     return render(request, 'customer_templates/home.html', context)
+
+# renders the show selected product page
+def show(request):
+
+    return render(request, 'customer_templates/product_show.html')
