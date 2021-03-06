@@ -1,0 +1,41 @@
+/* * {
+  outline: 1px dashed red;
+} */
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: #f1f3de;
+  color: #eb8f8f;
+}
+
+  body h1,h2,h3,h4,h5,h6 {
+    color: #ec0101;
+  }
+  /*  make text stand out */
+  /* body p,label {
+    text-shadow: 1px 1px black;
+    font-weight: number; */
+  }
+
+nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+header {
+  margin: 1% 2%;
+}
+
+main {
+  display: flex;
+  justify-content: space-between;
+  margin: 1%;
+}
+
+  main p {
+    color: black;
+  }

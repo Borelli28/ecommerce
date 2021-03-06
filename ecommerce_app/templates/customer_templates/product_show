@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <title>E-Commerce | Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'home_style.css' %}">
+  </head>
+  <body>
+
+    <!-- Navbar: title, cart -->
+    <nav class="navbar navbar-light bg-light">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">E-Commerce</span>
+        <span class="navbar-brand mb-0 h1">Shopping Cart ({{ num }})</span>
+      </div>
+    </nav>
+
+    <main>
+      <!-- Categories list, search bar -->
+      <div id="categories-search">
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-danger" type="submit">Search</button>
+        </form>
+          <ul class="list-group list-group-flush">
+            {% for cat in cats %}
+            <li class="list-group-item"><a href="#">{{ cat.name.capitalize }}</a></li>
+            {% endfor %}
+          </ul>
+      </div>
+
+      <!-- Products -->
+      <div id="products-section">
+        <!-- <h2>{{ cats.0.name }}</h2> -->
+          {% for product in products %}
+            <div id="products-lineup">
+              <div id="product-container">
+                <a href="/login">
+                  <img src="" alt="product image">
+                </a>
+              </div>
+              <label id="product-price">${{ product.price }}</label>
+              <h4>{{ product.name }}</h4>
+            </div>
+          {% endfor %}
+      </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+  </body>
+</html>

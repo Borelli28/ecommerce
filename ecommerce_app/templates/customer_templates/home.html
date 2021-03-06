@@ -22,27 +22,30 @@
       <div id="categories-search">
         <form class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <button class="btn btn-danger" type="submit">Search</button>
         </form>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"><a href="#">An item</a></li>
+            {% for cat in cats %}
+            <li class="list-group-item"><a href="#">{{ cat.name.capitalize }}</a></li>
+            {% endfor %}
           </ul>
       </div>
 
       <!-- Products -->
-      {% for product in products %}
       <div id="products-section">
-          <h2>{{ product.category.name.capitalize }}</h2>
-
-          <div id="products-lineup">
-            <div id="product-container">
-              <img src="" alt="product image">
+        <!-- <h2>{{ cats.0.name }}</h2> -->
+          {% for product in products %}
+            <div id="products-lineup">
+              <div id="product-container">
+                <a href="/login">
+                  <img src="" alt="product image">
+                </a>
+              </div>
               <label id="product-price">${{ product.price }}</label>
+              <h4>{{ product.name }}</h4>
             </div>
-            <h4>{{ product.name }}</h4>
-          </div>
+          {% endfor %}
       </div>
-      {% endfor %}
 
     </main>
 
