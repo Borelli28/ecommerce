@@ -80,9 +80,12 @@ def dashboard(request):
             mvp_one = all_products.filter(pur_count=mvp)
             mvp_two = all_products.filter(pur_count=mvp)
             mvp_three = all_products.filter(pur_count=mvp)
-            # print(mvp_one)
-            # print(mvp_two)
-            # print(mvp_three)
+    print("MVP One:")
+    print(mvp_one)
+    print("MVP Two:")
+    print(mvp_two)
+    print("MVP Three:")
+    print(mvp_three)
 
     # Pass: last product added, most purchased product & most purschased product from all sellers data.
     context = {"last_product":seller_last_prod, "most_pur_product_seller":mvp_instance, "mvp_one": mvp_one, "mvp_two": mvp_two, "mvp_three": mvp_three}

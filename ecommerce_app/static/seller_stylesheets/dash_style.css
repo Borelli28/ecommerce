@@ -38,7 +38,11 @@ nav {
     background-color: #dc3545;
     border-radius: 4%;
   }
-
+  /* main table img {
+    object-fit: cover;
+    width:5em;
+    height:3em;
+  } */
 
 
 main {
@@ -47,6 +51,12 @@ main {
   text-align: center;
   flex-wrap: wrap;
 }
+  /* last product added & most purchased product */
+  main .card-img-top {
+    object-fit: cover;
+    width:17.9em;
+    height:10em;
+  }
 
 section {
   width: 70%;
@@ -54,10 +64,6 @@ section {
   /* outline: 2px dashed blue; */
   margin: 5% 3%;
 }
-
- section #most-purchased-products-title {
-   background-color: white;
- }
 
 /* Override bootstrap navbar colors */
 .navbar-color{
