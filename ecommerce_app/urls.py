@@ -22,6 +22,6 @@ urlpatterns = [
     # Customer site
     path('login', views.login_page),
     path('home', views.home),
-    path('show', views.show)
+    path('show/<int:id>', views.show)
 
 ]

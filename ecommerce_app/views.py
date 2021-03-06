@@ -3,6 +3,10 @@ from ecommerce_app.models import *
 from django.contrib import messages
 import bcrypt
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 # python manage.py
 
 # renders login page
@@ -144,7 +148,13 @@ def products(request):
         if product.sold_by.email == our_seller.email:
             seller_products.append(product)
     print(seller_products)
+
+    # file_path = os.path.join(settings.FILES_DIR, 'mdoel-3-covers_gK9ualp')
+    # print("image filepath:")
+    # print(file_path)
+
     context = {"products":seller_products}
+
 
     return render(request, 'seller_templates/products.html', context)
 
@@ -304,10 +314,11 @@ def product_edit(request, id):
         product.category = _cat
         product.save()
 
-    if 'image' in request.POST:
+    if len(request.FILES['upload-img']) > 0:
         image = request.FILES['upload-img']
         product.img = image
         product.save()
+        print(image)
 
     print("Product has being edited:")
     print(product)
@@ -430,6 +441,23 @@ def home(request):
     return render(request, 'customer_templates/home.html', context)
 
 # renders the show selected product page
-def show(request):
+def show(request, id):
 
-    return render(request, 'customer_templates/product_show.html')
+    # get the product using id
+    product = Product.objects.get(id=id)
+    print("Product selected by user:")
+    print(product.name)
+
+    # Get the items in the same categories that the current product being displayed
+    #get the category of the current product
+    current_cat = product.category
+    print("Current Product Category")
+    print(current_cat)
+    # get all products with the same category for use in: similar items
+    similar_items = Product.objects.filter(category=current_cat)
+    print("Similar Items:")
+    print(similar_items)
+
+    context = {"product": product, "similar_items": similar_items}
+
+    return render(request, 'customer_templates/product_show.html', context)

@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <title>Dashboard | Products</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'products_style.css' %}">
+    <link rel="stylesheet" href="{% static 'seller_stylesheets/products_style.css' %}">
   </head>
 
   <body>
@@ -65,8 +65,8 @@
         <tbody>
           {% for product in products %}
           <tr>
-            <td>
-              <img src="static/images/{{ product.img }}" alt="{{ product.name }} product image">
+            <td id="img-td">
+              <img src="https://i.ibb.co/KFTsy6w/no-product-image.png" alt="Product Image">
             </td>
             <td>{{ product.id }}</td>
             <td>{{ product.name }}</td>
