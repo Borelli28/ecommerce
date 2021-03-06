@@ -51,6 +51,12 @@ main {
     background-color: white;
   }
 
+  main #product-img {
+    object-fit: cover;
+    width:10em;
+    height:7em;
+  }
+
   main #product-price {
     opacity: 0.5;
   }
