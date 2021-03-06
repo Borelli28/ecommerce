@@ -54,3 +54,14 @@ main {
     background-color: white;
     margin: 0 2%;
   }
+
+  /* main table #img-td {
+    width: 10%;
+    height: 1%;
+  } */
+
+  main table img {
+    object-fit: cover;
+    width:5em;
+    height:3em;
+  }

@@ -101,7 +101,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=19, decimal_places=2)
     inv_count = models.IntegerField()
-    img = models.FileField(upload_to='static/images/products', default="no-product-image.png")
+    img = models.ImageField(upload_to='products_img/', blank=True, default="no-product-image.png")
     category = models.ForeignKey(Category, related_name="category", on_delete=models.CASCADE)
     desc = models.CharField(max_length=255)
     sold_by = models.ForeignKey(Seller, related_name="seller", on_delete=models.CASCADE)

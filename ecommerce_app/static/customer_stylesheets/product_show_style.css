@@ -39,3 +39,7 @@ main {
   main p {
     color: black;
   }
+
+#similar-items {
+  margin-top: 10%;
+}

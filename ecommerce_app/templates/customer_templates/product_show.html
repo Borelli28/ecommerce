@@ -19,28 +19,36 @@
 
     <header>
       <a href="/home">Go Back</a>
-      <h2>Product Name</h2>
+      <h2>{{ product.name }}</h2>
     </header>
 
     <main>
 
       <div id="product-image">
-        <img src="" alt="product image">
+        <img src="../{{ product.img }}" alt="{{ product.img }}">
       </div>
 
       <div id="product-details">
-        <p>Description of the product</p>
+        <p>{{ product.desc }}</p>
       </div>
 
     </main>
 
     <div id="similar-items">
       <h4>Similar Items:</h4>
-
       <div id="itmes-container">
-
+        {% for item in similar_items %}
+          <div id="products-lineup">
+            <div id="product-container">
+              <a href="/show">
+                <img src="" alt="product image">
+              </a>
+            </div>
+            <label id="product-price">${{ product.price }}</label>
+            <h4>{{ product.name }}</h4>
+          </div>
+        {% endfor %}
       </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
