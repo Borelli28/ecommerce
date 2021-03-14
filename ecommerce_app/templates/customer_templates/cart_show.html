@@ -41,6 +41,7 @@
       </form>
 
       <form action="/process_payment/{{ product.id }}" method="post">
+        {% csrf_token %}
         <h2>Shipping Information:</h2>
         <label for="first_name">First Name:</label>
         <input type="text" name="first_name" required>

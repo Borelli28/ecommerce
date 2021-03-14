@@ -94,17 +94,22 @@ def orders(request):
 
     # need to give the orders of the current seller, also the instance of the customer that make the order
     all_orders = Order.objects.all()
-
+    seller_orders = []
     for order in all_orders:
-        # for each order it will grab that order product id
+        # for each order it will grab that order product
         order_product = Product.objects.get(id=order.product_id)
 
         our_seller = Seller.objects.get(id=request.session['sellerid'])
-        seller_orders = []
-        # if the current product is sold by our seller and the current order is not already in our seller orders list
+        # if the current product is sold by our seller
         # then add order to seller_orders
-        if order_product.sold_by.email == our_seller.email and order not in seller_orders:
-            seller_orders.append(order)
+        if order_product.sold_by.email == our_seller.email:
+            print("Seller Email:")
+            print(our_seller.email)
+            print("Sold by Email:")
+            print(order_product.sold_by.email)
+            # if the product has an order then add that product to seller_orders
+            if (order_product in seller_orders) == False:
+                seller_orders.append(order)
     print("All seller orders:")
     print(seller_orders)
 
@@ -120,8 +125,10 @@ def order_show(request, id):
     customer = order.submitted_by
     product_id = order.product_id
     product = Product.objects.get(id=product_id)
-    #calculate total of order: order.total + $3 Shipping
-    total = order.total + 3
+    # calculate order Shipping and gives the total cost of the transaction
+    ship_price = float(0.025)
+    ship_cost = float(order.total) * ship_price
+    total = float(order.total) + ship_cost
 
     # this color is used in the page in the status of the order
     color = "white"
@@ -146,11 +153,6 @@ def products(request):
     for product in all_products:
         if product.sold_by.email == our_seller.email:
             seller_products.append(product)
-    print(seller_products)
-
-    # file_path = os.path.join(settings.FILES_DIR, 'mdoel-3-covers_gK9ualp')
-    # print("image filepath:")
-    # print(file_path)
 
     context = {"products":seller_products}
 
@@ -227,7 +229,7 @@ def register_seller(request):
 def log_seller(request):
 
     # pass the post data to the method we wrote and save the response in a variable called errors
-    errors = Seller.objects.login_validator(request.POST)
+    errors = Seller.objects.seller_login_validator(request.POST)
     # check if the errors dictionary has anything in it
     if len(errors) > 0:
         # if the errors dictionary contains anything, loop through each key-value pair and make a flash message
@@ -435,69 +437,92 @@ def login_page(request):
 
 # renders the customer site home Page
 def home(request):
+    # if customer is logged in already then gives access to the home page
+    if 'customerid' in request.session:
 
-    all_products = Product.objects.all()
-    all_cats = Category.objects.all()
+        #if cart is empty then display 0 in quantity in cart
+        if 'quantity_of_products' not in request.session:
+            request.session['quantity_of_products'] = 0
 
-    context = {"products":all_products, "cats":all_cats}
+        all_products = Product.objects.all()
+        all_cats = Category.objects.all()
 
-    return render(request, 'customer_templates/home.html', context)
+        context = {"products":all_products, "cats":all_cats}
+
+        return render(request, 'customer_templates/home.html', context)
+
+    # else if not currently logged in then redirect to the customer login page
+    else:
+        return redirect('/login')
 
 # renders the home page but only showing the products under the customer selected category
 def home_category(request, id):
-    # gets the category instance using the id
-    category_sel = Category.objects.get(id=id)
-    # get all products in category selected
+    # if customer is logged in already then gives access to the home page
+    if 'customerid' in request.session:
+        # gets the category instance using the id
+        category_sel = Category.objects.get(id=id)
+        # get all products in category selected
 
-    all_products = Product.objects.all()
-    all_cats = Category.objects.all()
+        all_products = Product.objects.all()
+        all_cats = Category.objects.all()
 
-    context = {"products":all_products, "cats":all_cats, "category":category_sel}
+        context = {"products":all_products, "cats":all_cats, "category":category_sel}
 
-    return render(request, 'customer_templates/home_cat.html', context)
+        return render(request, 'customer_templates/home_cat.html', context)
+
+    else:
+        return redirect('/login')
 
 # renders the show selected product page
 def show(request, id):
 
-    # get the product using id
-    product = Product.objects.get(id=id)
-    print("Product selected by user:")
-    print(product.name)
+    # if customer is logged in already then gives access to the home page
+    if 'customerid' in request.session:
+        # get the product using id
+        product = Product.objects.get(id=id)
+        print("Product selected by user:")
+        print(product.name)
 
-    # Get the items in the same categories that the current product being displayed
-    #get the category of the current product
-    current_cat = product.category
-    print("Current Product Category")
-    print(current_cat)
-    # get all products with the same category for use in: similar items
-    similar_items = Product.objects.filter(category=current_cat)
-    print("Similar Items:")
-    print(similar_items)
+        # Get the items in the same categories that the current product being displayed
+        #get the category of the current product
+        current_cat = product.category
+        print("Current Product Category")
+        print(current_cat)
+        # get all products with the same category for use in: similar items
+        similar_items = Product.objects.filter(category=current_cat)
+        print("Similar Items:")
+        print(similar_items)
 
-    context = {"product": product, "similar_items": similar_items}
+        context = {"product": product, "similar_items": similar_items}
 
-    return render(request, 'customer_templates/product_show.html', context)
+        return render(request, 'customer_templates/product_show.html', context)
+    else:
+        return redirect('/login')
 
 # renders page to process user orders and payment
 def show_cart(request):
+    # if customer is logged in already then gives access to the home page
+    if 'customerid' in request.session:
 
-    # only show the page if there is products in cart
-    if 'product_in_cart' in request.session:
+        # only show the page if there is products in cart
+        if 'product_in_cart' in request.session:
 
-        product_id = request.session['product_in_cart']
-        product = Product.objects.get(id=product_id)
-        quantity = request.session['quantity_of_products']
-        print("Product in cart")
-        print(product.name)
-        print("This quantity selected:")
-        print(quantity)
+            product_id = request.session['product_in_cart']
+            product = Product.objects.get(id=product_id)
+            quantity = request.session['quantity_of_products']
+            print("Product in cart")
+            print(product.name)
+            print("This quantity selected:")
+            print(quantity)
 
-        context = {"product":product, "quantity":quantity}
+            context = {"product":product, "quantity":quantity}
 
-        return render(request, 'customer_templates/cart_show.html', context)
+            return render(request, 'customer_templates/cart_show.html', context)
 
+        else:
+            return redirect('/home')
     else:
-        return redirect('/home')
+        return redirect('/login')
 
 """
 
@@ -585,6 +610,8 @@ def cart(request, id):
 
     # get the quanity of the product to add to cart(1, 2 or 3) from select from
     quantity = request.POST['num_products']
+    print("Quanity to be added to Cart:")
+    print(quantity)
 
     # saves in session the quantity and the products currently in the customer cart
     request.session['product_in_cart'] = id
@@ -629,21 +656,35 @@ def payment(request, prod_id):
         logged_customer = Customer.objects.get(id=request.session['customerid'])
 
         # create order instance
-        new_order = Order.objects.create(submitted_by=logged_customer, product_id=prod_id, total=_total)
+        new_order = Order.objects.create(submitted_by=logged_customer, product_id=prod_id, total=_total, ship_addr=_addr)
+
+        # Update the inventory count and the Purchased counter of the product bought
+        quantity_purchased = request.session['quantity_of_products']
+        # get the product instance
+        product = Product.objects.get(id=prod_id)
+
+        product_inv_count = product.inv_count
+        product_pur_count = product.pur_count
+        print("Old inv_count:")
+        print(product_inv_count)
+        print("Old pur_count:")
+        print(product_pur_count)
+
+        new_inv = product_inv_count - int(quantity_purchased)
+        new_pur = product_pur_count + int(quantity_purchased)
+        product.inv_count = new_inv
+        product.pur_count = new_pur
+        product.save()
+
+        print("new inv_count:")
+        print(product.inv_count)
+        print("new pur_count:")
+        print(product.pur_count)
 
         print("Order Created:")
         print(Order.objects.last())
 
-        # submitted_by = models.ForeignKey(Customer, related_name="customer", on_delete=models.CASCADE)
-        # #product ids in a string, but separated by a coma: "1,5,2,13"
-        # product_id = models.IntegerField()
-        # total = models.DecimalField(max_digits=19, decimal_places=2)
-        # # in-process, shipped or cancelled
-        # status = models.CharField(max_length=10 ,default="in-process")
-        # created_at = models.DateTimeField(auto_now_add=True)
-        # updated_at = models.DateTimeField(auto_now=True
-
-        return redirect('/home')
+        return redirect('/clear_cart')
 
 # Clear cart session data
 def clear_cart(request):

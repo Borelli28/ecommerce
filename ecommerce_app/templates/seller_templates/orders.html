@@ -5,7 +5,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <title>Dashboard | Orders</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'orders_style.css' %}">
+    <link rel="stylesheet" href="{% static 'seller_stylesheets/orders_style.css' %}">
   </head>
   <body>
 
@@ -43,7 +43,7 @@
           <th scope="col">Order ID</th>
           <th scope="col">Name</th>
           <th scope="col">Date</th>
-          <th scope="col">Billing Address</th>
+          <th scope="col">Shipping Address</th>
           <th scope="col">Total</th>
           <th scope="col">Status</th>
         </tr>
@@ -54,7 +54,7 @@
           <td><a href="/orders/show/{{ order.id }}">{{ order.id }}</a></th>
           <td>{{ order.submitted_by.first_name }} {{ order.submitted_by.last_name }}</td>
           <td>{{ order.created_at }}</td>
-          <td>{{ order.submitted_by.bill_addr }}</td>
+          <td>{{ order.ship_addr }}</td>
           <td>{{ order.total }}</td>
           <!--  Status drop down menu -->
           <td>
