@@ -13,7 +13,7 @@
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
         <span class="navbar-brand mb-0 h1">E-Commerce</span>
-        <span class="navbar-brand mb-0 h1">Shopping Cart ({{ num }})</span>
+        <span class="navbar-brand mb-0 h1"><a href="/cart_show">Shopping Cart ({{ request.session.quantity_of_products }})</a></span>
       </div>
     </nav>
 

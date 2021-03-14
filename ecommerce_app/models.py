@@ -69,6 +69,39 @@ class ValidatorManager(models.Manager):
 
         return errors
 
+    def payment_validator(self, postData):
+        errors = {}
+
+        if len(postData['first_name']) < 2:
+            errors['first_name'] = "First Name should be at least 2 characters long"
+
+        if len(postData['last_name']) < 2:
+            errors['last_name'] = "Last Name should be at least 2 characters long"
+
+        if len(postData['addr']) < 7:
+            errors['addr'] = "Address should be at least 7 characters. Make sure to include Zip Code, State & Street Address."
+
+        # Billing inputs validators
+        if len(postData['first_name_bill']) < 2:
+            errors['first_name_bill'] = "First Name should be at least 2 characters long"
+
+        if len(postData['last_name']) < 2:
+            errors['last_name'] = "Last Name should be at least 2 characters long"
+
+        if len(postData['addr_bill']) < 7:
+            errors['addr_bill'] = "Address should be at least 7 characters. Make sure to include Zip Code, State & Street Address."
+
+        if len(postData['card_number']) != 16:
+            errors['card_number'] = "Card number does not seems correct. Card number should be a 16 digits number with no spaces"
+
+        if len(postData['sec_code']) != 3:
+            errors['sec_code'] = "Security code does not seems correct. Security Code should be at an 3 digits code with no spaces in between"
+
+        if len(postData['exp_date']) > 8:
+            errors['exp_date'] = "Make sure to pick the month and year of expiration date"
+
+        return errors
+
 class Customer(models.Model):
 
     first_name = models.CharField(max_length=35)
@@ -79,6 +112,7 @@ class Customer(models.Model):
     bill_addr = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    objects = ValidatorManager()
 
 class Seller(models.Model):
 
@@ -121,3 +155,4 @@ class Order(models.Model):
     status = models.CharField(max_length=10 ,default="in-process")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    objects = ValidatorManager()
