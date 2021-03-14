@@ -7,6 +7,8 @@ import bcrypt
 
 # renders login page
 def login(request):
+    # display 0 items in cart
+    request.session['quantity_of_products'] = 0
 
     return render(request, 'seller_templates/login.html')
 
@@ -227,7 +229,7 @@ def register_seller(request):
 def log_seller(request):
 
     # pass the post data to the method we wrote and save the response in a variable called errors
-    errors = Seller.objects.login_validator(request.POST)
+    errors = Seller.objects.seller_login_validator(request.POST)
     # check if the errors dictionary has anything in it
     if len(errors) > 0:
         # if the errors dictionary contains anything, loop through each key-value pair and make a flash message
@@ -435,69 +437,87 @@ def login_page(request):
 
 # renders the customer site home Page
 def home(request):
+    # if customer is logged in already then gives access to the home page
+    if 'customerid' in request.session:
+        all_products = Product.objects.all()
+        all_cats = Category.objects.all()
 
-    all_products = Product.objects.all()
-    all_cats = Category.objects.all()
+        context = {"products":all_products, "cats":all_cats}
 
-    context = {"products":all_products, "cats":all_cats}
+        return render(request, 'customer_templates/home.html', context)
 
-    return render(request, 'customer_templates/home.html', context)
+    # else if not currently logged in then redirect to the customer login page
+    else:
+        return redirect('/login')
 
 # renders the home page but only showing the products under the customer selected category
 def home_category(request, id):
-    # gets the category instance using the id
-    category_sel = Category.objects.get(id=id)
-    # get all products in category selected
+    # if customer is logged in already then gives access to the home page
+    if 'customerid' in request.session:
+        # gets the category instance using the id
+        category_sel = Category.objects.get(id=id)
+        # get all products in category selected
 
-    all_products = Product.objects.all()
-    all_cats = Category.objects.all()
+        all_products = Product.objects.all()
+        all_cats = Category.objects.all()
 
-    context = {"products":all_products, "cats":all_cats, "category":category_sel}
+        context = {"products":all_products, "cats":all_cats, "category":category_sel}
 
-    return render(request, 'customer_templates/home_cat.html', context)
+        return render(request, 'customer_templates/home_cat.html', context)
+
+    else:
+        return redirect('/login')
 
 # renders the show selected product page
 def show(request, id):
 
-    # get the product using id
-    product = Product.objects.get(id=id)
-    print("Product selected by user:")
-    print(product.name)
+    # if customer is logged in already then gives access to the home page
+    if 'customerid' in request.session:
+        # get the product using id
+        product = Product.objects.get(id=id)
+        print("Product selected by user:")
+        print(product.name)
 
-    # Get the items in the same categories that the current product being displayed
-    #get the category of the current product
-    current_cat = product.category
-    print("Current Product Category")
-    print(current_cat)
-    # get all products with the same category for use in: similar items
-    similar_items = Product.objects.filter(category=current_cat)
-    print("Similar Items:")
-    print(similar_items)
+        # Get the items in the same categories that the current product being displayed
+        #get the category of the current product
+        current_cat = product.category
+        print("Current Product Category")
+        print(current_cat)
+        # get all products with the same category for use in: similar items
+        similar_items = Product.objects.filter(category=current_cat)
+        print("Similar Items:")
+        print(similar_items)
 
-    context = {"product": product, "similar_items": similar_items}
+        context = {"product": product, "similar_items": similar_items}
 
-    return render(request, 'customer_templates/product_show.html', context)
+        return render(request, 'customer_templates/product_show.html', context)
+    else:
+        return redirect('/login')
 
 # renders page to process user orders and payment
 def show_cart(request):
+    # if customer is logged in already then gives access to the home page
+    if 'customerid' in request.session:
 
-    # only show the page if there is products in cart
-    if 'product_in_cart' in request.session:
+        # only show the page if there is products in cart
+        if 'product_in_cart' in request.session:
 
-        product_id = request.session['product_in_cart']
-        product = Product.objects.get(id=product_id)
-        quantity = request.session['quantity_of_products']
-        print("Product in cart")
-        print(product.name)
-        print("This quantity selected:")
-        print(quantity)
+            product_id = request.session['product_in_cart']
+            product = Product.objects.get(id=product_id)
+            quantity = request.session['quantity_of_products']
+            print("Product in cart")
+            print(product.name)
+            print("This quantity selected:")
+            print(quantity)
 
-        context = {"product":product, "quantity":quantity}
+            context = {"product":product, "quantity":quantity}
 
-        return render(request, 'customer_templates/cart_show.html', context)
+            return render(request, 'customer_templates/cart_show.html', context)
 
+        else:
+            return redirect('/home')
     else:
-        return redirect('/home')
+        return redirect('/login')
 
 """
 
@@ -629,21 +649,24 @@ def payment(request, prod_id):
         logged_customer = Customer.objects.get(id=request.session['customerid'])
 
         # create order instance
-        new_order = Order.objects.create(submitted_by=logged_customer, product_id=prod_id, total=_total)
+        new_order = Order.objects.create(submitted_by=logged_customer, product_id=prod_id, total=_total, ship_addr=_addr)
+
+        # Update the inventory count and the Purchased counter of the product bought
+        quantity_purchased = request.session['quantity_of_products']
+        # get the product instance
+        product = Product.objects.get(id=prod_id)
+
+        product_inv_count = product.inv_count
+        product_pur_count = product.pur_count
+        new_inv = product_inv_count - quantity_purchased
+        new_pur = product_pur_count + quantity_purchased
+        product.objects.update(inv_count=new_inv)
+        product.objects.update(pur_count=new_pur)
 
         print("Order Created:")
         print(Order.objects.last())
 
-        # submitted_by = models.ForeignKey(Customer, related_name="customer", on_delete=models.CASCADE)
-        # #product ids in a string, but separated by a coma: "1,5,2,13"
-        # product_id = models.IntegerField()
-        # total = models.DecimalField(max_digits=19, decimal_places=2)
-        # # in-process, shipped or cancelled
-        # status = models.CharField(max_length=10 ,default="in-process")
-        # created_at = models.DateTimeField(auto_now_add=True)
-        # updated_at = models.DateTimeField(auto_now=True
-
-        return redirect('/home')
+        return redirect('/clear_cart')
 
 # Clear cart session data
 def clear_cart(request):

@@ -54,7 +54,7 @@
           <td><a href="/orders/show/{{ order.id }}">{{ order.id }}</a></th>
           <td>{{ order.submitted_by.first_name }} {{ order.submitted_by.last_name }}</td>
           <td>{{ order.created_at }}</td>
-          <td>{{ order.submitted_by.bill_addr }}</td>
+          <td>{{ order.ship_addr }}</td>
           <td>{{ order.total }}</td>
           <!--  Status drop down menu -->
           <td>
