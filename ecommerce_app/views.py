@@ -7,8 +7,6 @@ import bcrypt
 
 # renders login page
 def login(request):
-    # display 0 items in cart
-    request.session['quantity_of_products'] = 0
 
     return render(request, 'seller_templates/login.html')
 
@@ -96,17 +94,22 @@ def orders(request):
 
     # need to give the orders of the current seller, also the instance of the customer that make the order
     all_orders = Order.objects.all()
-
+    seller_orders = []
     for order in all_orders:
-        # for each order it will grab that order product id
+        # for each order it will grab that order product
         order_product = Product.objects.get(id=order.product_id)
 
         our_seller = Seller.objects.get(id=request.session['sellerid'])
-        seller_orders = []
-        # if the current product is sold by our seller and the current order is not already in our seller orders list
+        # if the current product is sold by our seller
         # then add order to seller_orders
-        if order_product.sold_by.email == our_seller.email and order not in seller_orders:
-            seller_orders.append(order)
+        if order_product.sold_by.email == our_seller.email:
+            print("Seller Email:")
+            print(our_seller.email)
+            print("Sold by Email:")
+            print(order_product.sold_by.email)
+            # if the product has an order then add that product to seller_orders
+            if (order_product in seller_orders) == False:
+                seller_orders.append(order)
     print("All seller orders:")
     print(seller_orders)
 
@@ -122,8 +125,10 @@ def order_show(request, id):
     customer = order.submitted_by
     product_id = order.product_id
     product = Product.objects.get(id=product_id)
-    #calculate total of order: order.total + $3 Shipping
-    total = order.total + 3
+    # calculate order Shipping and gives the total cost of the transaction
+    ship_price = float(0.025)
+    ship_cost = float(order.total) * ship_price
+    total = float(order.total) + ship_cost
 
     # this color is used in the page in the status of the order
     color = "white"
@@ -148,11 +153,6 @@ def products(request):
     for product in all_products:
         if product.sold_by.email == our_seller.email:
             seller_products.append(product)
-    print(seller_products)
-
-    # file_path = os.path.join(settings.FILES_DIR, 'mdoel-3-covers_gK9ualp')
-    # print("image filepath:")
-    # print(file_path)
 
     context = {"products":seller_products}
 
@@ -439,6 +439,11 @@ def login_page(request):
 def home(request):
     # if customer is logged in already then gives access to the home page
     if 'customerid' in request.session:
+
+        #if cart is empty then display 0 in quantity in cart
+        if 'quantity_of_products' not in request.session:
+            request.session['quantity_of_products'] = 0
+
         all_products = Product.objects.all()
         all_cats = Category.objects.all()
 
@@ -605,6 +610,8 @@ def cart(request, id):
 
     # get the quanity of the product to add to cart(1, 2 or 3) from select from
     quantity = request.POST['num_products']
+    print("Quanity to be added to Cart:")
+    print(quantity)
 
     # saves in session the quantity and the products currently in the customer cart
     request.session['product_in_cart'] = id
@@ -658,10 +665,21 @@ def payment(request, prod_id):
 
         product_inv_count = product.inv_count
         product_pur_count = product.pur_count
-        new_inv = product_inv_count - quantity_purchased
-        new_pur = product_pur_count + quantity_purchased
-        product.objects.update(inv_count=new_inv)
-        product.objects.update(pur_count=new_pur)
+        print("Old inv_count:")
+        print(product_inv_count)
+        print("Old pur_count:")
+        print(product_pur_count)
+
+        new_inv = product_inv_count - int(quantity_purchased)
+        new_pur = product_pur_count + int(quantity_purchased)
+        product.inv_count = new_inv
+        product.pur_count = new_pur
+        product.save()
+
+        print("new inv_count:")
+        print(product.inv_count)
+        print("new pur_count:")
+        print(product.pur_count)
 
         print("Order Created:")
         print(Order.objects.last())
