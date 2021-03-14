@@ -24,11 +24,11 @@
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-danger" type="submit">Search</button>
         </form>
-          <ul class="list-group list-group-flush">
+          <ol class="list-group list-group-flush">
             {% for cat in cats %}
-            <li class="list-group-item"><a href="#">{{ cat.name.capitalize }}</a></li>
+            <li class="list-group-item"><a href="/home/{{ cat.id }}">{{ cat.name.capitalize }}</a></li>
             {% endfor %}
-          </ul>
+          </ol>
       </div>
 
       <!-- Products -->

@@ -25,7 +25,7 @@
     <main>
 
       <div id="product-image">
-        <img src="../{{ product.img }}" alt="{{ product.img }}">
+        <img src="https://i.ibb.co/KFTsy6w/no-product-image.png" alt="Product Image" id="product-img">
       </div>
 
       <div id="product-details">
@@ -36,12 +36,12 @@
 
     <div id="similar-items">
       <h4>Similar Items:</h4>
-      <div id="itmes-container">
+      <div id="items-container">
         {% for item in similar_items %}
           <div id="products-lineup">
             <div id="product-container">
               <a href="/show">
-                <img src="" alt="product image">
+                <img src="https://i.ibb.co/KFTsy6w/no-product-image.png" alt="Product Image" id="item-img">
               </a>
             </div>
             <label id="product-price">${{ product.price }}</label>

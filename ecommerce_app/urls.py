@@ -4,6 +4,7 @@ from . import views
 # python manage.py
 
 urlpatterns = [
+    # Seller site urls
     path('', views.login),
     path('clear', views.clear),
     path('add_seller', views.register_seller),
@@ -19,9 +20,10 @@ urlpatterns = [
     path('product_add', views.create_product),
     path('update_status_order/<int:id>', views.update_status_order),
 
-    # Customer site
+    # Customer site urls
     path('login', views.login_page),
     path('home', views.home),
+    path('home/<int:id>', views.home_category),
     path('show/<int:id>', views.show)
 
 ]
