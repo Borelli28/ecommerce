@@ -34,9 +34,13 @@
         </tr>
       </table>
 
-      <button class="btn btn-success" type="button" name="button">Continue Shopping</button>
+      <a href="/clear_cart">Clear all items from cart</a>
 
-      <form action="/process_payment/{{ id }}" method="post">
+      <form action="/home">
+        <button class="btn btn-success" type="submit" name="button">Continue Shopping</button>
+      </form>
+
+      <form action="/process_payment/{{ product.id }}" method="post">
         <h2>Shipping Information:</h2>
         <label for="first_name">First Name:</label>
         <input type="text" name="first_name" required>
@@ -66,8 +70,9 @@
         <label for="exp_date">Expiration Date:</label>
         <input type="month" name="exp_date" required>
 
-        <button  class="btn btn-primary" type="submit" name="pay">Submit Payment</button>
+        <input type="hidden" name="total" value="{{ product.price|mul:quantity }}">
 
+        <button  class="btn btn-primary" type="submit" name="pay">Submit Payment</button>
       </form>
 
     </main>

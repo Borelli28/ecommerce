@@ -427,6 +427,10 @@ Customer site methods
 # renders customer login page
 def login_page(request):
 
+    # clear all data in session
+    request.session.clear()
+    print("All data stored in session has been erased")
+
     return render(request, 'customer_templates/login.html')
 
 # renders the customer site home Page
@@ -477,17 +481,23 @@ def show(request, id):
 # renders page to process user orders and payment
 def show_cart(request):
 
-    product_id = request.session['product_in_cart']
-    product = Product.objects.get(id=product_id)
-    quantity = request.session['quantity_of_products']
-    print("Product in cart")
-    print(product.name)
-    print("This quantity selected:")
-    print(quantity)
+    # only show the page if there is products in cart
+    if 'product_in_cart' in request.session:
 
-    context = {"product":product, "quantity":quantity}
+        product_id = request.session['product_in_cart']
+        product = Product.objects.get(id=product_id)
+        quantity = request.session['quantity_of_products']
+        print("Product in cart")
+        print(product.name)
+        print("This quantity selected:")
+        print(quantity)
 
-    return render(request, 'customer_templates/cart_show.html', context)
+        context = {"product":product, "quantity":quantity}
+
+        return render(request, 'customer_templates/cart_show.html', context)
+
+    else:
+        return redirect('/home')
 
 """
 
@@ -498,14 +508,14 @@ def show_cart(request):
 def register_customer(request):
 
     # pass the post data to the method we wrote and save the response in a variable called errors
-    errors = Seller.objects.seller_register_val(request.POST)
+    errors = Customer.objects.customer_register_val(request.POST)
     # check if the errors dictionary has anything in it
     if len(errors) > 0:
         # if the errors dictionary contains anything, loop through each key-value pair and make a flash message
         for key, value in errors.items():
             messages.error(request, value)
         # redirect the user back to the form to fix the errors
-        return redirect('/')
+        return redirect('/login')
 
     else:
         # if the errors object is empty, that means there were no errors!
@@ -518,7 +528,7 @@ def register_customer(request):
         # Hash the password using bcrypt
         pw_hash = bcrypt.hashpw(_password.encode(), bcrypt.gensalt()).decode()
         # Create the object instance
-        seller = Seller.objects.create(first_name=_first_name, last_name=_last_name, email=_email, password=pw_hash)
+        customer = Customer.objects.create(first_name=_first_name, last_name=_last_name, email=_email, password=pw_hash)
 
         print("POST data:")
         print(_first_name)
@@ -526,20 +536,20 @@ def register_customer(request):
         print(_email)
         print(pw_hash)
 
-        print("Seller Created:")
-        print(Seller.objects.last())
+        print("Customer registered")
+        print(Customer.objects.last())
 
         # save the sellerid in session
-        request.session['sellerid'] = seller.id
+        request.session['customerid'] = customer.id
 
-        return redirect('/dashboard')
+        return redirect('/home')
 
 # Handles the data from customer login form and if user exist in db,
 # save the id of user in session and redirect to home page
-def log_customer(request, id):
+def log_customer(request):
 
     # pass the post data to the method we wrote and save the response in a variable called errors
-    errors = Customer.objects.login_validator(request.POST)
+    errors = Customer.objects.customer_login_validator(request.POST)
     # check if the errors dictionary has anything in it
     if len(errors) > 0:
         # if the errors dictionary contains anything, loop through each key-value pair and make a flash message
@@ -589,7 +599,7 @@ def cart(request, id):
 
 # Process the customer payment then clear the sessions and redirect to home
 # with an alert saying that the order was placed sucessfully
-def payment(request, id):
+def payment(request, prod_id):
 
     # pass the post data to the method we wrote and save the response in a variable called errors
     errors = Order.objects.payment_validator(request.POST)
@@ -607,22 +617,22 @@ def payment(request, id):
         _first_name = request.POST['first_name']
         _last_name = request.POST['last_name']
         _addr = request.POST['addr']
-
-        # Create the object instance
-        order_instance = Order.objects.create(submitted_by=)
+        _total = request.POST['total']
 
         print("POST data:")
         print(_first_name)
         print(_last_name)
-        print(_email)
-        print(pw_hash)
+        print(_addr)
 
-        print("Seller Created:")
-        print(Seller.objects.last())
 
-        # save the sellerid in session
-        request.session['sellerid'] = seller.id
+        # gets customer instance using the id of the current logged in customer
+        logged_customer = Customer.objects.get(id=request.session['customerid'])
 
+        # create order instance
+        new_order = Order.objects.create(submitted_by=logged_customer, product_id=prod_id, total=_total)
+
+        print("Order Created:")
+        print(Order.objects.last())
 
         # submitted_by = models.ForeignKey(Customer, related_name="customer", on_delete=models.CASCADE)
         # #product ids in a string, but separated by a coma: "1,5,2,13"
@@ -633,4 +643,13 @@ def payment(request, id):
         # created_at = models.DateTimeField(auto_now_add=True)
         # updated_at = models.DateTimeField(auto_now=True
 
-        return redirect('/dashboard')
+        return redirect('/home')
+
+# Clear cart session data
+def clear_cart(request):
+
+    request.session['quantity_of_products'] = 0
+    del request.session['product_in_cart']
+    print("Cart cleared")
+
+    return redirect('/home')
