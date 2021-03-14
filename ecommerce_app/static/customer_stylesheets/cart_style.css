@@ -1,0 +1,15 @@
+/* * {
+  outline: 1px dashed red;
+} */
+
+form {
+  display: block;
+}
+
+  form input {
+    margin: 1%;
+  }
+
+  form #addr_input, #addr_bill_input {
+    width: 45%;
+  }

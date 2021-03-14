@@ -46,6 +46,10 @@ main {
     height:30em;
   }
 
+  main #add_to_cart select {
+    margin-bottom: 10%;
+  }
+
 #similar-items {
   margin-top: 10%;
 }

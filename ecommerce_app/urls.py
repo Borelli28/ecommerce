@@ -22,8 +22,13 @@ urlpatterns = [
 
     # Customer site urls
     path('login', views.login_page),
+    path('add_customer', views.register_customer),
+    path('log_customer', views.log_customer),
     path('home', views.home),
     path('home/<int:id>', views.home_category),
-    path('show/<int:id>', views.show)
-
+    path('show/<int:id>', views.show),
+    path('cart/<int:id>', views.cart),
+    path('cart_show', views.show_cart),
+    path('clear_cart', views.clear_cart),
+    path('process_payment/<int:id>', views.payment),
 ]
