@@ -3,10 +3,6 @@ from ecommerce_app.models import *
 from django.contrib import messages
 import bcrypt
 
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
 # python manage.py
 
 # renders login page
@@ -442,6 +438,19 @@ def home(request):
     context = {"products":all_products, "cats":all_cats}
 
     return render(request, 'customer_templates/home.html', context)
+
+# renders the home page but only showing the products under the customer selected category
+def home_category(request, id):
+    # gets the category instance using the id
+    category_sel = Category.objects.get(id=id)
+    # get all products in category selected
+
+    all_products = Product.objects.all()
+    all_cats = Category.objects.all()
+
+    context = {"products":all_products, "cats":all_cats, "category":category_sel}
+
+    return render(request, 'customer_templates/home_cat.html', context)
 
 # renders the show selected product page
 def show(request, id):

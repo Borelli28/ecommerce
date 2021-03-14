@@ -10,6 +10,7 @@ html {
 body {
   background-color: #f1f3de;
   color: #eb8f8f;
+  text-align: center;
 }
 
   body h1,h2,h3,h4,h5,h6 {
@@ -20,7 +21,6 @@ body {
     text-shadow: 1px 1px black;
     font-weight: number; */
   }
-
 nav {
   display: flex;
   justify-content: space-between;
@@ -40,6 +40,25 @@ main {
     color: black;
   }
 
+  main #product-img {
+    object-fit: cover;
+    width:30em;
+    height:30em;
+  }
+
 #similar-items {
   margin-top: 10%;
+}
+
+#items-container {
+  display: flex;
+  justify-content: space-around;
+  margin: 1% 1%;
+  flex-wrap: wrap;
+}
+
+#item-img {
+  object-fit: cover;
+  width: 20em;
+  height: 20em;
 }
